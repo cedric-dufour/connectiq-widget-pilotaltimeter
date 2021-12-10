@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.System as Sys;
 using Toybox.WatchUi as Ui;
 
@@ -27,11 +28,11 @@ class MenuSettingsUnits extends Ui.Menu {
 
   function initialize() {
     Menu.initialize();
-    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsUnits));
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleUnitElevation), :menuUnitElevation);
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleUnitPressure), :menuUnitPressure);
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleUnitTemperature), :menuUnitTemperature);
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleUnitTimeUTC), :menuUnitTimeUTC);
+    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsUnits) as String);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleUnitElevation) as String, :menuUnitElevation);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleUnitPressure) as String, :menuUnitPressure);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleUnitTemperature) as String, :menuUnitTemperature);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleUnitTimeUTC) as String, :menuUnitTimeUTC);
   }
 
 }
@@ -49,19 +50,27 @@ class MenuSettingsUnitsDelegate extends Ui.MenuInputDelegate {
   function onMenuItem(item) {
     if (item == :menuUnitElevation) {
       //Sys.println("DEBUG: MenuSettingsUnitsDelegate.onMenuItem(:menuUnitElevation)");
-      Ui.pushView(new PickerUnitElevation(), new PickerUnitElevationDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerUnitElevation(),
+                  new PickerUnitElevationDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
     else if (item == :menuUnitPressure) {
       //Sys.println("DEBUG: MenuSettingsUnitsDelegate.onMenuItem(:menuUnitPressure)");
-      Ui.pushView(new PickerUnitPressure(), new PickerUnitPressureDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerUnitPressure(),
+                  new PickerUnitPressureDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
     else if (item == :menuUnitTemperature) {
       //Sys.println("DEBUG: MenuSettingsUnitsDelegate.onMenuItem(:menuUnitTemperature)");
-      Ui.pushView(new PickerUnitTemperature(), new PickerUnitTemperatureDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerUnitTemperature(),
+                  new PickerUnitTemperatureDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
     else if (item == :menuUnitTimeUTC) {
       //Sys.println("DEBUG: MenuSettingsUnitsDelegate.onMenuItem(:menuUnitTimeUTC)");
-      Ui.pushView(new PickerUnitTimeUTC(), new PickerUnitTimeUTCDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerUnitTimeUTC(),
+                  new PickerUnitTimeUTCDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
   }
 

@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.System as Sys;
 using Toybox.WatchUi as Ui;
 
@@ -27,10 +28,10 @@ class MenuSettingsCalibration extends Ui.Menu {
 
   function initialize() {
     Menu.initialize();
-    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsCalibration));
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleCalibrationQNH), :menuCalibrationQNH);
+    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsCalibration) as String);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleCalibrationQNH) as String, :menuCalibrationQNH);
     if($.oMyAltimeter.fAltitudeActual != null) {
-      Menu.addItem(Ui.loadResource(Rez.Strings.titleCalibrationElevation), :menuCalibrationElevation);
+      Menu.addItem(Ui.loadResource(Rez.Strings.titleCalibrationElevation) as String, :menuCalibrationElevation);
     }
   }
 
@@ -49,11 +50,15 @@ class MenuSettingsCalibrationDelegate extends Ui.MenuInputDelegate {
   function onMenuItem(item) {
     if (item == :menuCalibrationQNH) {
       //Sys.println("DEBUG: MenuSettingsCalibrationDelegate.onMenuItem(:menuCalibrationQNH)");
-      Ui.pushView(new PickerCalibrationQNH(), new PickerCalibrationQNHDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerCalibrationQNH(),
+                  new PickerCalibrationQNHDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
     else if (item == :menuCalibrationElevation) {
       //Sys.println("DEBUG: MenuSettingsCalibrationDelegate.onMenuItem(:menuCalibrationElevation)");
-      Ui.pushView(new PickerCalibrationElevation(), new PickerCalibrationElevationDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerCalibrationElevation(),
+                  new PickerCalibrationElevationDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
   }
 

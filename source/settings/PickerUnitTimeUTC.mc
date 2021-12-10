@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -28,15 +29,22 @@ class PickerUnitTimeUTC extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var bUnitTimeUTC = App.Properties.getValue("userUnitTimeUTC");
+    var bUnitTimeUTC = App.Properties.getValue("userUnitTimeUTC") as Boolean?;
 
     // Initialize picker
-    var oFactory = new PickerFactoryDictionary([false, true], [Ui.loadResource(Rez.Strings.valueUnitTimeLT), Ui.loadResource(Rez.Strings.valueUnitTimeUTC)], null);
+    var oFactory = new PickerFactoryDictionary([false, true],
+                                               [Ui.loadResource(Rez.Strings.valueUnitTimeLT) as String,
+                                                Ui.loadResource(Rez.Strings.valueUnitTimeUTC) as String],
+                                               null);
     Picker.initialize({
-      :title => new Ui.Text({ :text => Ui.loadResource(Rez.Strings.titleUnitTimeUTC), :font => Gfx.FONT_TINY, :locX=>Ui.LAYOUT_HALIGN_CENTER, :locY=>Ui.LAYOUT_VALIGN_BOTTOM, :color => Gfx.COLOR_BLUE }),
-      :pattern => [ oFactory ],
-      :defaults => [ oFactory.indexOfKey(bUnitTimeUTC) ]
-    });
+        :title => new Ui.Text({
+            :text => Ui.loadResource(Rez.Strings.titleUnitTimeUTC) as String,
+            :font => Gfx.FONT_TINY,
+            :locX=>Ui.LAYOUT_HALIGN_CENTER,
+            :locY=>Ui.LAYOUT_VALIGN_BOTTOM,
+            :color => Gfx.COLOR_BLUE}),
+        :pattern => [oFactory],
+        :defaults => [oFactory.indexOfKey(bUnitTimeUTC != null ? bUnitTimeUTC : false)]});
   }
 
 }
@@ -53,13 +61,15 @@ class PickerUnitTimeUTCDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userUnitTimeUTC", _amValues[0]);
+    App.Properties.setValue("userUnitTimeUTC", _amValues[0] as App.PropertyValueType);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

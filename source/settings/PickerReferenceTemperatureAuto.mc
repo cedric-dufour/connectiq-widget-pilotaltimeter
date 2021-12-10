@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -28,15 +29,22 @@ class PickerReferenceTemperatureAuto extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var bReferenceTemperatureAuto = App.Properties.getValue("userReferenceTemperatureAuto");
+    var bReferenceTemperatureAuto = App.Properties.getValue("userReferenceTemperatureAuto") as Boolean?;
 
     // Initialize picker
-    var oFactory = new PickerFactoryDictionary([true, false], [Ui.loadResource(Rez.Strings.valueAuto), Ui.loadResource(Rez.Strings.valueSet)], null);
+    var oFactory = new PickerFactoryDictionary([true, false],
+                                               [Ui.loadResource(Rez.Strings.valueAuto) as String,
+                                                Ui.loadResource(Rez.Strings.valueSet) as String],
+                                               null);
     Picker.initialize({
-      :title => new Ui.Text({ :text => Ui.loadResource(Rez.Strings.titleReferenceTemperatureAuto), :font => Gfx.FONT_TINY, :locX=>Ui.LAYOUT_HALIGN_CENTER, :locY=>Ui.LAYOUT_VALIGN_BOTTOM, :color => Gfx.COLOR_BLUE }),
-      :pattern => [ oFactory ],
-      :defaults => [ oFactory.indexOfKey(bReferenceTemperatureAuto) ]
-    });
+        :title => new Ui.Text({
+            :text => Ui.loadResource(Rez.Strings.titleReferenceTemperatureAuto) as String,
+            :font => Gfx.FONT_TINY,
+            :locX=>Ui.LAYOUT_HALIGN_CENTER,
+            :locY=>Ui.LAYOUT_VALIGN_BOTTOM,
+            :color => Gfx.COLOR_BLUE}),
+        :pattern => [oFactory],
+        :defaults => [oFactory.indexOfKey(bReferenceTemperatureAuto != null ? bReferenceTemperatureAuto : false)]});
   }
 
 }
@@ -53,13 +61,15 @@ class PickerReferenceTemperatureAutoDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userReferenceTemperatureAuto", _amValues[0]);
+    App.Properties.setValue("userReferenceTemperatureAuto", _amValues[0] as App.PropertyValueType);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

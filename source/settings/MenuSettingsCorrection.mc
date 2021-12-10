@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.System as Sys;
 using Toybox.WatchUi as Ui;
 
@@ -27,9 +28,9 @@ class MenuSettingsCorrection extends Ui.Menu {
 
   function initialize() {
     Menu.initialize();
-    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsCorrection));
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleCorrectionAbsolute), :menuCorrectionAbsolute);
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleCorrectionRelative), :menuCorrectionRelative);
+    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsCorrection) as String);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleCorrectionAbsolute) as String, :menuCorrectionAbsolute);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleCorrectionRelative) as String, :menuCorrectionRelative);
   }
 
 }
@@ -47,11 +48,15 @@ class MenuSettingsCorrectionDelegate extends Ui.MenuInputDelegate {
   function onMenuItem(item) {
     if (item == :menuCorrectionAbsolute) {
       //Sys.println("DEBUG: MenuSettingsCorrectionDelegate.onMenuItem(:menuCorrectionAbsolute)");
-      Ui.pushView(new PickerCorrectionAbsolute(), new PickerCorrectionAbsoluteDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerCorrectionAbsolute(),
+                  new PickerCorrectionAbsoluteDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
     else if (item == :menuCorrectionRelative) {
       //Sys.println("DEBUG: MenuSettingsCorrectionDelegate.onMenuItem(:menuCorrectionRelative)");
-      Ui.pushView(new PickerCorrectionRelative(), new PickerCorrectionRelativeDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerCorrectionRelative(),
+                  new PickerCorrectionRelativeDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
   }
 

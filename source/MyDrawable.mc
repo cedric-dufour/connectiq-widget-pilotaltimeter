@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
 
@@ -30,7 +31,7 @@ class MyDrawable extends Ui.Drawable {
   //
 
   // Background color
-  private var iColorBackground;
+  private var iColorBackground as Number = Gfx.COLOR_BLACK;
 
 
   //
@@ -38,10 +39,7 @@ class MyDrawable extends Ui.Drawable {
   //
 
   function initialize() {
-    Drawable.initialize({ :identifier => "MyDrawable" });
-
-    // Background color
-    self.iColorBackground = Gfx.COLOR_BLACK;
+    Drawable.initialize({:identifier => "MyDrawable"});
   }
 
   function draw(_oDC) {
@@ -57,7 +55,7 @@ class MyDrawable extends Ui.Drawable {
   // FUNCTIONS: self
   //
 
-  function setColorBackground(_iColorBackground) {
+  function setColorBackground(_iColorBackground as Number) as Void {
     self.iColorBackground = _iColorBackground;
   }
 

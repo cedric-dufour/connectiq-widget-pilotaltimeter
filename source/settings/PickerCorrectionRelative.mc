@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -28,31 +29,35 @@ class PickerCorrectionRelative extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var fValue = App.Properties.getValue("userCorrectionRelative")*10000.0f;
+    var fValue = (App.Properties.getValue("userCorrectionRelative") as Float)*10000.0f;
 
     // Split components
-    var amValues = new [5];
+    var aiValues = new Array<Number>[5];
     fValue += 0.05f;
-    amValues[4] = fValue.toNumber() % 10;
+    aiValues[4] = fValue.toNumber() % 10;
     fValue = fValue / 10.0f;
-    amValues[3] = fValue.toNumber() % 10;
+    aiValues[3] = fValue.toNumber() % 10;
     fValue = fValue / 10.0f;
-    amValues[2] = fValue.toNumber() % 10;
+    aiValues[2] = fValue.toNumber() % 10;
     fValue = fValue / 10.0f;
-    amValues[1] = fValue.toNumber() % 10;
+    aiValues[1] = fValue.toNumber() % 10;
     fValue = fValue / 10.0f;
-    amValues[0] = fValue.toNumber();
+    aiValues[0] = fValue.toNumber();
 
     // Initialize picker
     Picker.initialize({
-      :title => new Ui.Text({ :text => Ui.loadResource(Rez.Strings.titleCorrectionRelative), :font => Gfx.FONT_TINY, :locX=>Ui.LAYOUT_HALIGN_CENTER, :locY=>Ui.LAYOUT_VALIGN_BOTTOM, :color => Gfx.COLOR_BLUE }),
-      :pattern => [ new PickerFactoryNumber(0, 1, { :langFormat => "$1$." }),
-                    new PickerFactoryNumber(0, 9, null),
-                    new PickerFactoryNumber(0, 9, null),
-                    new PickerFactoryNumber(0, 9, null),
-                    new PickerFactoryNumber(0, 9, null) ],
-      :defaults => amValues
-    });
+        :title => new Ui.Text({
+            :text => Ui.loadResource(Rez.Strings.titleCorrectionRelative) as String,
+            :font => Gfx.FONT_TINY,
+            :locX=>Ui.LAYOUT_HALIGN_CENTER,
+            :locY=>Ui.LAYOUT_VALIGN_BOTTOM,
+            :color => Gfx.COLOR_BLUE}),
+        :pattern => [new PickerFactoryNumber(0, 1, {:langFormat => "$1$."}),
+                     new PickerFactoryNumber(0, 9, null),
+                     new PickerFactoryNumber(0, 9, null),
+                     new PickerFactoryNumber(0, 9, null),
+                     new PickerFactoryNumber(0, 9, null)],
+        :defaults => aiValues});
   }
 
 }
@@ -70,13 +75,15 @@ class PickerCorrectionRelativeDelegate extends Ui.PickerDelegate {
   function onAccept(_amValues) {
     // Set property and exit
     var fValue = _amValues[0]*10000.0f + _amValues[1]*1000.0f + _amValues[2]*100.0f + _amValues[3]*10.0f + _amValues[4];
-    App.Properties.setValue("userCorrectionRelative", fValue/10000.0f);
+    App.Properties.setValue("userCorrectionRelative", (fValue/10000.0f) as App.PropertyValueType);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

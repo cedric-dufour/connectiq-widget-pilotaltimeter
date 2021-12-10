@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.System as Sys;
 using Toybox.WatchUi as Ui;
 
@@ -27,8 +28,8 @@ class MenuSettingsGeneral extends Ui.Menu {
 
   function initialize() {
     Menu.initialize();
-    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsGeneral));
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleGeneralBackgroundColor), :menuGeneralBackgroundColor);
+    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsGeneral) as String);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleGeneralBackgroundColor) as String, :menuGeneralBackgroundColor);
   }
 
 }
@@ -46,7 +47,9 @@ class MenuSettingsGeneralDelegate extends Ui.MenuInputDelegate {
   function onMenuItem(item) {
     if (item == :menuGeneralBackgroundColor) {
       //Sys.println("DEBUG: MenuSettingsGeneralDelegate.onMenuItem(:menuGeneralBackgroundColor)");
-      Ui.pushView(new PickerGeneralBackgroundColor(), new PickerGeneralBackgroundColorDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerGeneralBackgroundColor(),
+                  new PickerGeneralBackgroundColorDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
   }
 

@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -28,15 +29,23 @@ class PickerUnitTemperature extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var iUnitTemperature = App.Properties.getValue("userUnitTemperature");
+    var iUnitTemperature = App.Properties.getValue("userUnitTemperature") as Number?;
 
     // Initialize picker
-    var oFactory = new PickerFactoryDictionary([-1, 0, 1], [Ui.loadResource(Rez.Strings.valueAuto), Ui.loadResource(Rez.Strings.valueUnitTemperatureMetric), Ui.loadResource(Rez.Strings.valueUnitTemperatureStatute)], null);
+    var oFactory = new PickerFactoryDictionary([-1, 0, 1],
+                                               [Ui.loadResource(Rez.Strings.valueAuto) as String,
+                                                Ui.loadResource(Rez.Strings.valueUnitTemperatureMetric) as String,
+                                                Ui.loadResource(Rez.Strings.valueUnitTemperatureStatute) as String],
+                                               null);
     Picker.initialize({
-      :title => new Ui.Text({ :text => Ui.loadResource(Rez.Strings.titleUnitTemperature), :font => Gfx.FONT_TINY, :locX=>Ui.LAYOUT_HALIGN_CENTER, :locY=>Ui.LAYOUT_VALIGN_BOTTOM, :color => Gfx.COLOR_BLUE }),
-      :pattern => [ oFactory ],
-      :defaults => [ oFactory.indexOfKey(iUnitTemperature) ]
-    });
+        :title => new Ui.Text({
+            :text => Ui.loadResource(Rez.Strings.titleUnitTemperature) as String,
+            :font => Gfx.FONT_TINY,
+            :locX=>Ui.LAYOUT_HALIGN_CENTER,
+            :locY=>Ui.LAYOUT_VALIGN_BOTTOM,
+            :color => Gfx.COLOR_BLUE}),
+        :pattern => [oFactory],
+        :defaults => [oFactory.indexOfKey(iUnitTemperature)]});
   }
 
 }
@@ -53,14 +62,16 @@ class PickerUnitTemperatureDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userUnitTemperature", _amValues[0]);
+    App.Properties.setValue("userUnitTemperature", _amValues[0] as App.PropertyValueType);
     $.oMySettings.load();  // ... use proper units in settings
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

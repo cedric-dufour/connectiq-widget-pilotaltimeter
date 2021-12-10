@@ -16,24 +16,26 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Activity;
 using Toybox.Application as App;
 using Toybox.Sensor;
 using Toybox.System as Sys;
 using Toybox.Timer;
+using Toybox.WatchUi as Ui;
 
 //
 // GLOBALS
 //
 
 // Application settings
-var oMySettings = null;
+var oMySettings as MySettings = new MySettings();
 
 // Altimeter data
-var oMyAltimeter = null;
+var oMyAltimeter as MyAltimeter = new MyAltimeter();
 
 // Current view
-var oMyView = null;
+var oMyView as MyView?;
 
 
 //
@@ -47,7 +49,7 @@ class MyApp extends App.AppBase {
   //
 
   // UI update time
-  private var oUpdateTimer;
+  private var oUpdateTimer as Timer.Timer?;
 
 
   //
@@ -56,22 +58,13 @@ class MyApp extends App.AppBase {
 
   function initialize() {
     AppBase.initialize();
-
-    // Application settings
-    $.oMySettings = new MySettings();
-
-    // Altimeter data
-    $.oMyAltimeter = new MyAltimeter();
-
-    // UI update time
-    self.oUpdateTimer = null;
   }
 
   function onStart(state) {
     //Sys.println("DEBUG: MyApp.onStart()");
 
     // Enable sensor events
-    Sensor.setEnabledSensors([Sensor.SENSOR_TEMPERATURE]);
+    Sensor.setEnabledSensors([Sensor.SENSOR_TEMPERATURE] as Array<Sensor.SensorType>);
     Sensor.enableSensorEvents(method(:onSensorEvent));
 
     // Start UI update timer (every multiple of 60 seconds)
@@ -79,10 +72,10 @@ class MyApp extends App.AppBase {
     self.oUpdateTimer = new Timer.Timer();
     var iUpdateTimerDelay = (60-Sys.getClockTime().sec)%60;
     if(iUpdateTimerDelay > 0) {
-      self.oUpdateTimer.start(method(:onUpdateTimer_init), 1000*iUpdateTimerDelay, false);
+      (self.oUpdateTimer as Timer.Timer).start(method(:onUpdateTimer_init), 1000*iUpdateTimerDelay, false);
     }
     else {
-      self.oUpdateTimer.start(method(:onUpdateTimer), 60000, true);
+      (self.oUpdateTimer as Timer.Timer).start(method(:onUpdateTimer), 60000, true);
     }
   }
 
@@ -91,18 +84,19 @@ class MyApp extends App.AppBase {
 
     // Stop UI update timer
     if(self.oUpdateTimer != null) {
-      self.oUpdateTimer.stop();
+      (self.oUpdateTimer as Timer.Timer).stop();
       self.oUpdateTimer = null;
     }
 
     // Disable sensor events
+    Sensor.setEnabledSensors([] as Array<Sensor.SensorType>);
     Sensor.enableSensorEvents(null);
   }
 
   function getInitialView() {
     //Sys.println("DEBUG: MyApp.getInitialView()");
 
-    return [new MyView(), new MyViewDelegate()];
+    return [new MyView(), new MyViewDelegate()] as Array<Ui.Views or Ui.InputDelegates>;
   }
 
   function onSettingsChanged() {
@@ -115,7 +109,7 @@ class MyApp extends App.AppBase {
   // FUNCTIONS: self
   //
 
-  function updateApp() {
+  function updateApp() as Void {
     //Sys.println("DEBUG: MyApp.updateApp()");
 
     // Load settings
@@ -126,21 +120,21 @@ class MyApp extends App.AppBase {
     self.updateUi();
   }
 
-  function loadSettings() {
+  function loadSettings() as Void {
     //Sys.println("DEBUG: MyApp.loadSettings()");
 
     // Load settings
     $.oMySettings.load();
   }
 
-  function onSensorEvent(_oSensorInfo) {
+  function onSensorEvent(_oSensorInfo as Sensor.Info) as Void {
     //Sys.println("DEBUG: MyApp.onSensorEvent());
 
     // Process sensor data
     // ... temperature
     if($.oMySettings.bReferenceTemperatureAuto) {
       if(_oSensorInfo has :temperature and _oSensorInfo.temperature != null) {
-        $.oMyAltimeter.setTemperatureActual(_oSensorInfo.temperature+273.15f);  // ... altimeter internals are °K
+        $.oMyAltimeter.setTemperatureActual((_oSensorInfo.temperature as Float)+273.15f);  // ... altimeter internals are °K
       }
     }
     else {
@@ -148,32 +142,34 @@ class MyApp extends App.AppBase {
     }
     // ... pressure
     var oActivityInfo = Activity.getActivityInfo();  // ... we need *raw ambient* pressure
-    if(oActivityInfo has :ambientPressure and oActivityInfo.ambientPressure != null) {
-      $.oMyAltimeter.setQFE(oActivityInfo.ambientPressure);
+    if(oActivityInfo != null) {
+      if(oActivityInfo has :ambientPressure and oActivityInfo.ambientPressure != null) {
+        $.oMyAltimeter.setQFE(oActivityInfo.ambientPressure as Float);
+      }
     }
 
     // UI update
     self.updateUi();
   }
 
-  function onUpdateTimer_init() {
+  function onUpdateTimer_init() as Void {
     //Sys.println("DEBUG: MyApp.onUpdateTimer_init()");
     self.onUpdateTimer();
     self.oUpdateTimer = new Timer.Timer();
-    self.oUpdateTimer.start(method(:onUpdateTimer), 60000, true);
+    (self.oUpdateTimer as Timer.Timer).start(method(:onUpdateTimer), 60000, true);
   }
 
-  function onUpdateTimer() {
+  function onUpdateTimer() as Void {
     //Sys.println("DEBUG: MyApp.onUpdateTimer()");
     self.updateUi();
   }
 
-  function updateUi() {
+  function updateUi() as Void {
     //Sys.println("DEBUG: MyApp.updateUi()");
 
     // Update UI
     if($.oMyView != null) {
-      $.oMyView.updateUi();
+      ($.oMyView as MyView).updateUi();
     }
   }
 

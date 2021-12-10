@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -27,7 +28,10 @@ class PickerReferenceElevation extends PickerGenericElevation {
   //
 
   function initialize() {
-    PickerGenericElevation.initialize(Ui.loadResource(Rez.Strings.titleReferenceElevation), App.Properties.getValue("userReferenceElevation"), $.oMySettings.iUnitElevation, false);
+    PickerGenericElevation.initialize(Ui.loadResource(Rez.Strings.titleReferenceElevation) as String,
+                                      App.Properties.getValue("userReferenceElevation") as Float,
+                                      $.oMySettings.iUnitElevation,
+                                      false);
   }
 
 }
@@ -44,13 +48,16 @@ class PickerReferenceElevationDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userReferenceElevation", PickerGenericElevation.getValue(_amValues, $.oMySettings.iUnitElevation));
+    App.Properties.setValue("userReferenceElevation",
+                            PickerGenericElevation.getValue(_amValues, $.oMySettings.iUnitElevation) as App.PropertyValueType);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

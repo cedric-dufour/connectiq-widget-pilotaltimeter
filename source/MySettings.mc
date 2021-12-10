@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
@@ -28,128 +29,119 @@ class MySettings {
 
   // Settings
   // ... calibration
-  public var fCalibrationQNH;
+  public var fCalibrationQNH as Float = 1013.25f;
   // ... reference
-  public var fReferenceElevation;
-  public var fReferenceTemperatureISAOffset;
-  public var bReferenceTemperatureAuto;
+  public var fReferenceElevation as Float = 0.0f;
+  public var fReferenceTemperatureISAOffset as Float = 0.0f;
+  public var bReferenceTemperatureAuto as Boolean = false;
   // ... general
-  public var iGeneralBackgroundColor;
+  public var iGeneralBackgroundColor as Number = 0;
   // ... units
-  public var iUnitElevation;
-  public var iUnitPressure;
-  public var iUnitTemperature;
-  public var bUnitTimeUTC;
+  public var iUnitElevation as Number = -1;
+  public var iUnitPressure as Number = -1;
+  public var iUnitTemperature as Number = -1;
+  public var bUnitTimeUTC as Boolean = false;
   // ... correction
-  public var fCorrectionAbsolute;
-  public var fCorrectionRelative;
+  public var fCorrectionAbsolute as Float = 0.0f;
+  public var fCorrectionRelative as Float = 1.0f;
 
   // Units
   // ... symbols
-  public var sUnitElevation;
-  public var sUnitPressure;
-  public var sUnitTemperature;
-  public var sUnitTime;
+  public var sUnitElevation as String = "m";
+  public var sUnitPressure as String = "mb";
+  public var sUnitTemperature as String = "C";
+  public var sUnitTime as String = "LT";
   // ... conversion coefficients/offsets
-  public var fUnitElevationCoefficient;
-  public var fUnitPressureCoefficient;
-  public var fUnitTemperatureCoefficient;
-  public var fUnitTemperatureOffset;
+  public var fUnitElevationCoefficient as Float = 1.0f;
+  public var fUnitPressureCoefficient as Float = 0.01f;
+  public var fUnitTemperatureCoefficient as Float = 1.0f;
+  public var fUnitTemperatureOffset as Float = -273.15f;
 
 
   //
   // FUNCTIONS: self
   //
 
-  function load() {
+  function load() as Void {
     // Settings
     // ... calibration
-    self.setCalibrationQNH(App.Properties.getValue("userCalibrationQNH"));
+    self.setCalibrationQNH(App.Properties.getValue("userCalibrationQNH") as Float?);
     // ... reference
-    self.setReferenceElevation(App.Properties.getValue("userReferenceElevation"));
-    self.setReferenceTemperatureISAOffset(App.Properties.getValue("userReferenceTemperatureISAOffset"));
-    self.setReferenceTemperatureAuto(App.Properties.getValue("userReferenceTemperatureAuto"));
+    self.setReferenceElevation(App.Properties.getValue("userReferenceElevation") as Float?);
+    self.setReferenceTemperatureISAOffset(App.Properties.getValue("userReferenceTemperatureISAOffset") as Float?);
+    self.setReferenceTemperatureAuto(App.Properties.getValue("userReferenceTemperatureAuto") as Boolean?);
     // ... general
-    self.setGeneralBackgroundColor(App.Properties.getValue("userGeneralBackgroundColor"));
+    self.setGeneralBackgroundColor(App.Properties.getValue("userGeneralBackgroundColor") as Number?);
     // ... units
-    self.setUnitElevation(App.Properties.getValue("userUnitElevation"));
-    self.setUnitPressure(App.Properties.getValue("userUnitPressure"));
-    self.setUnitTemperature(App.Properties.getValue("userUnitTemperature"));
-    self.setUnitTimeUTC(App.Properties.getValue("userUnitTimeUTC"));
+    self.setUnitElevation(App.Properties.getValue("userUnitElevation") as Number?);
+    self.setUnitPressure(App.Properties.getValue("userUnitPressure") as Number?);
+    self.setUnitTemperature(App.Properties.getValue("userUnitTemperature") as Number?);
+    self.setUnitTimeUTC(App.Properties.getValue("userUnitTimeUTC") as Boolean?);
     // ... correction
-    self.setCorrectionAbsolute(App.Properties.getValue("userCorrectionAbsolute"));
-    self.setCorrectionRelative(App.Properties.getValue("userCorrectionRelative"));
+    self.setCorrectionAbsolute(App.Properties.getValue("userCorrectionAbsolute") as Float?);
+    self.setCorrectionRelative(App.Properties.getValue("userCorrectionRelative") as Float?);
   }
 
-  function setCalibrationQNH(_fCalibrationQNH) {  // [Pa]
+  function setCalibrationQNH(_fValue as Float?) as Void {  // [Pa]
     // REF: https://en.wikipedia.org/wiki/Atmospheric_pressure#Records
-    if(_fCalibrationQNH == null) {
-      _fCalibrationQNH = 101325.0f;
+    var fValue = _fValue != null ? _fValue : 101325.0f;
+    if(fValue > 110000.0f) {
+      fValue = 110000.0f;
     }
-    else if(_fCalibrationQNH > 110000.0f) {
-      _fCalibrationQNH = 110000.0f;
+    else if(fValue < 85000.0f) {
+      fValue = 85000.0f;
     }
-    else if(_fCalibrationQNH < 85000.0f) {
-      _fCalibrationQNH = 85000.0f;
-    }
-    self.fCalibrationQNH = _fCalibrationQNH;
+    self.fCalibrationQNH = fValue;
   }
 
-  function setReferenceElevation(_fReferenceElevation) {  // [m]
-    if(_fReferenceElevation == null) {
-      _fReferenceElevation = 0.0f;
+  function setReferenceElevation(_fValue as Float?) as Void {  // [m]
+    var fValue = _fValue != null ? _fValue : 0.0f;
+    if(fValue > 9999.0f) {
+      fValue = 9999.0f;
     }
-    else if(_fReferenceElevation > 9999.0f) {
-      _fReferenceElevation = 9999.0f;
+    else if(fValue < 0.0f) {
+      fValue = 0.0f;
     }
-    else if(_fReferenceElevation < 0.0f) {
-      _fReferenceElevation = 0.0f;
-    }
-    self.fReferenceElevation = _fReferenceElevation;
+    self.fReferenceElevation = fValue;
   }
 
-  function setReferenceTemperatureISAOffset(_fReferenceTemperatureISAOffset) {  // [°K]
-    if(_fReferenceTemperatureISAOffset == null) {
-      _fReferenceTemperatureISAOffset = 0.0f;
+  function setReferenceTemperatureISAOffset(_fValue as Float?) as Void {  // [°K]
+    var fValue = _fValue != null ? _fValue : 0.0f;
+    if(fValue > 99.9f) {
+      fValue = 99.9f;
     }
-    else if(_fReferenceTemperatureISAOffset > 99.9f) {
-      _fReferenceTemperatureISAOffset = 99.9f;
+    else if(fValue < -99.9f) {
+      fValue = 99.9f;
     }
-    else if(_fReferenceTemperatureISAOffset < -99.9f) {
-      _fReferenceTemperatureISAOffset = 99.9f;
-    }
-    self.fReferenceTemperatureISAOffset = _fReferenceTemperatureISAOffset;
+    self.fReferenceTemperatureISAOffset = fValue;
   }
 
-  function setReferenceTemperatureAuto(_bReferenceTemperatureAuto) {
-    if(_bReferenceTemperatureAuto == null) {
-      _bReferenceTemperatureAuto = false;
-    }
-    self.bReferenceTemperatureAuto = _bReferenceTemperatureAuto;
+  function setReferenceTemperatureAuto(_bValue as Boolean?) as Void {
+    var bValue = _bValue != null ? _bValue : false;
+    self.bReferenceTemperatureAuto = bValue;
   }
 
-  function setGeneralBackgroundColor(_iGeneralBackgroundColor) {
-    if(_iGeneralBackgroundColor == null) {
-      _iGeneralBackgroundColor = Gfx.COLOR_BLACK;
-    }
-    self.iGeneralBackgroundColor = _iGeneralBackgroundColor;
+  function setGeneralBackgroundColor(_iValue as Number?) as Void {
+    var iValue = _iValue != null ? _iValue : Gfx.COLOR_BLACK;
+    self.iGeneralBackgroundColor = iValue;
   }
 
-  function setUnitElevation(_iUnitElevation) {
-    if(_iUnitElevation == null or _iUnitElevation < 0 or _iUnitElevation > 1) {
-      _iUnitElevation = -1;
+  function setUnitElevation(_iValue as Number?) as Void {
+    var iValue = _iValue != null ? _iValue : -1;
+    if(iValue < 0 or iValue > 1) {
+      iValue = -1;
     }
-    self.iUnitElevation = _iUnitElevation;
+    self.iUnitElevation = iValue;
     if(self.iUnitElevation < 0) {  // ... auto
       var oDeviceSettings = Sys.getDeviceSettings();
       if(oDeviceSettings has :elevationUnits and oDeviceSettings.elevationUnits != null) {
-        _iUnitElevation = oDeviceSettings.elevationUnits;
+        iValue = oDeviceSettings.elevationUnits;
       }
       else {
-        _iUnitElevation = Sys.UNIT_METRIC;
+        iValue = Sys.UNIT_METRIC;
       }
     }
-    if(_iUnitElevation == Sys.UNIT_STATUTE) {  // ... statute
+    if(iValue == Sys.UNIT_STATUTE) {  // ... statute
       // ... [ft]
       self.sUnitElevation = "ft";
       self.fUnitElevationCoefficient = 3.280839895f;  // ... m -> ft
@@ -161,22 +153,23 @@ class MySettings {
     }
   }
 
-  function setUnitPressure(_iUnitPressure) {
-    if(_iUnitPressure == null or _iUnitPressure < 0 or _iUnitPressure > 1) {
-      _iUnitPressure = -1;
+  function setUnitPressure(_iValue as Number?) as Void {
+    var iValue = _iValue != null ? _iValue : -1;
+    if(iValue < 0 or iValue > 1) {
+      iValue = -1;
     }
-    self.iUnitPressure = _iUnitPressure;
+    self.iUnitPressure = iValue;
     if(self.iUnitPressure < 0) {  // ... auto
       // NOTE: assume weight units are a good indicator of preferred pressure units
       var oDeviceSettings = Sys.getDeviceSettings();
       if(oDeviceSettings has :weightUnits and oDeviceSettings.weightUnits != null) {
-        _iUnitPressure = oDeviceSettings.weightUnits;
+        iValue = oDeviceSettings.weightUnits;
       }
       else {
-        _iUnitPressure = Sys.UNIT_METRIC;
+        iValue = Sys.UNIT_METRIC;
       }
     }
-    if(_iUnitPressure == Sys.UNIT_STATUTE) {  // ... statute
+    if(iValue == Sys.UNIT_STATUTE) {  // ... statute
       // ... [inHg]
       self.sUnitPressure = "inHg";
       self.fUnitPressureCoefficient = 0.0002953f;  // ... Pa -> inHg
@@ -188,21 +181,22 @@ class MySettings {
     }
   }
 
-  function setUnitTemperature(_iUnitTemperature) {
-    if(_iUnitTemperature == null or _iUnitTemperature < 0 or _iUnitTemperature > 1) {
-      _iUnitTemperature = -1;
+  function setUnitTemperature(_iValue as Number?) as Void {
+    var iValue = _iValue != null ? _iValue : -1;
+    if(iValue < 0 or iValue > 1) {
+      iValue = -1;
     }
-    self.iUnitTemperature = _iUnitTemperature;
+    self.iUnitTemperature = iValue;
     if(self.iUnitTemperature < 0) {  // ... auto
       var oDeviceSettings = Sys.getDeviceSettings();
       if(oDeviceSettings has :temperatureUnits and oDeviceSettings.temperatureUnits != null) {
-        _iUnitTemperature = oDeviceSettings.temperatureUnits;
+        iValue = oDeviceSettings.temperatureUnits;
       }
       else {
-        _iUnitTemperature = Sys.UNIT_METRIC;
+        iValue = Sys.UNIT_METRIC;
       }
     }
-    if(_iUnitTemperature == Sys.UNIT_STATUTE) {  // ... statute
+    if(iValue == Sys.UNIT_STATUTE) {  // ... statute
       // ... [°F]
       self.sUnitTemperature = "F";
       self.fUnitTemperatureCoefficient = 1.8f;  // ... °K -> °F
@@ -217,44 +211,37 @@ class MySettings {
 
   }
 
-  function setUnitTimeUTC(_bUnitTimeUTC) {
-    if(_bUnitTimeUTC == null) {
-      _bUnitTimeUTC = false;
-    }
-    if(_bUnitTimeUTC) {
-      self.bUnitTimeUTC = true;
+  function setUnitTimeUTC(_bValue as Boolean?) as Void {
+    var bValue = _bValue != null ? _bValue : false;
+    self.bUnitTimeUTC = bValue;
+    if(bValue) {
       self.sUnitTime = "Z";
     }
     else {
-      self.bUnitTimeUTC = false;
       self.sUnitTime = "LT";
     }
   }
 
-  function setCorrectionAbsolute(_fCorrectionAbsolute) {  // [Pa]
-    if(_fCorrectionAbsolute == null) {
-      _fCorrectionAbsolute = 0.0f;
+  function setCorrectionAbsolute(_fValue as Float?) as Void {  // [Pa]
+    var fValue = _fValue != null ? _fValue : 101325.0f;
+    if(fValue > 9999.0f) {
+      fValue = 9999.0f;
     }
-    else if(_fCorrectionAbsolute > 9999.0f) {
-      _fCorrectionAbsolute = 9999.0f;
+    else if(fValue < -9999.0f) {
+      fValue = -9999.0f;
     }
-    else if(_fCorrectionAbsolute < -9999.0f) {
-      _fCorrectionAbsolute = -9999.0f;
-    }
-    self.fCorrectionAbsolute = _fCorrectionAbsolute;
+    self.fCorrectionAbsolute = fValue;
   }
 
-  function setCorrectionRelative(_fCorrectionRelative) {
-    if(_fCorrectionRelative == null) {
-      _fCorrectionRelative = 1.0f;
+  function setCorrectionRelative(_fValue as Float?) as Void {
+    var fValue = _fValue != null ? _fValue : 101325.0f;
+    if(fValue > 1.9999f) {
+      fValue = 1.9999f;
     }
-    else if(_fCorrectionRelative > 1.9999f) {
-      _fCorrectionRelative = 1.9999f;
+    else if(fValue < 0.0001f) {
+      fValue = 0.0001f;
     }
-    else if(_fCorrectionRelative < 0.0001f) {
-      _fCorrectionRelative = 0.0001f;
-    }
-    self.fCorrectionRelative = _fCorrectionRelative;
+    self.fCorrectionRelative = fValue;
   }
 
 }

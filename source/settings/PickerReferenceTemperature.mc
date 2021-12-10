@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -27,7 +28,10 @@ class PickerReferenceTemperature extends PickerGenericTemperature {
   //
 
   function initialize() {
-    PickerGenericTemperature.initialize(Ui.loadResource(Rez.Strings.titleReferenceTemperature), $.oMyAltimeter.fTemperatureActual, $.oMySettings.iUnitTemperature, true);
+    PickerGenericTemperature.initialize(Ui.loadResource(Rez.Strings.titleReferenceTemperature) as String,
+                                        $.oMyAltimeter.fTemperatureActual,
+                                        $.oMySettings.iUnitTemperature,
+                                        true);
   }
 
 }
@@ -45,14 +49,18 @@ class PickerReferenceTemperatureDelegate extends Ui.PickerDelegate {
   function onAccept(_amValues) {
     // Set property and exit
     var fValue = PickerGenericTemperature.getValue(_amValues, $.oMySettings.iUnitTemperature);
-    fValue -= $.oMyAltimeter.fTemperatureISA;
-    App.Properties.setValue("userReferenceTemperatureISAOffset", fValue);
+    if($.oMyAltimeter.fTemperatureISA != null) {
+      fValue -= ($.oMyAltimeter.fTemperatureISA as Float);
+    }
+    App.Properties.setValue("userReferenceTemperatureISAOffset", fValue as App.PropertyValueType);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

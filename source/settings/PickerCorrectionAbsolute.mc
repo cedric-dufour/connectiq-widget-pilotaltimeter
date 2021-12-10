@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -27,7 +28,10 @@ class PickerCorrectionAbsolute extends PickerGenericPressure {
   //
 
   function initialize() {
-    PickerGenericPressure.initialize(Ui.loadResource(Rez.Strings.titleCorrectionAbsolute), App.Properties.getValue("userCorrectionAbsolute"), $.oMySettings.iUnitPressure, true);
+    PickerGenericPressure.initialize(Ui.loadResource(Rez.Strings.titleCorrectionAbsolute) as String,
+                                     App.Properties.getValue("userCorrectionAbsolute") as Float,
+                                     $.oMySettings.iUnitPressure,
+                                     true);
   }
 
 }
@@ -44,13 +48,16 @@ class PickerCorrectionAbsoluteDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userCorrectionAbsolute", PickerGenericPressure.getValue(_amValues, $.oMySettings.iUnitPressure));
+    App.Properties.setValue("userCorrectionAbsolute",
+                            PickerGenericPressure.getValue(_amValues, $.oMySettings.iUnitPressure) as App.PropertyValueType);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

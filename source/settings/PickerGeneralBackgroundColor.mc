@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -28,15 +29,22 @@ class PickerGeneralBackgroundColor extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var iColor = App.Properties.getValue("userGeneralBackgroundColor");
+    var iColor = App.Properties.getValue("userGeneralBackgroundColor") as Number?;
 
     // Initialize picker
-    var oFactory = new PickerFactoryDictionary([Gfx.COLOR_WHITE, Gfx.COLOR_BLACK], [Ui.loadResource(Rez.Strings.valueColorWhite), Ui.loadResource(Rez.Strings.valueColorBlack)], null);
+    var oFactory = new PickerFactoryDictionary([Gfx.COLOR_WHITE, Gfx.COLOR_BLACK],
+                                               [Ui.loadResource(Rez.Strings.valueColorWhite) as String,
+                                                Ui.loadResource(Rez.Strings.valueColorBlack) as String],
+                                               null);
     Picker.initialize({
-      :title => new Ui.Text({ :text => Ui.loadResource(Rez.Strings.titleGeneralBackgroundColor), :font => Gfx.FONT_TINY, :locX=>Ui.LAYOUT_HALIGN_CENTER, :locY=>Ui.LAYOUT_VALIGN_BOTTOM, :color => Gfx.COLOR_BLUE }),
-      :pattern => [ oFactory ],
-      :defaults => [ oFactory.indexOfKey(iColor) ]
-    });
+        :title => new Ui.Text({
+            :text => Ui.loadResource(Rez.Strings.titleGeneralBackgroundColor) as String,
+            :font => Gfx.FONT_TINY,
+            :locX=>Ui.LAYOUT_HALIGN_CENTER,
+            :locY=>Ui.LAYOUT_VALIGN_BOTTOM,
+            :color => Gfx.COLOR_BLUE}),
+        :pattern => [oFactory],
+        :defaults => [oFactory.indexOfKey(iColor != null ? iColor : Gfx.COLOR_BLACK)]});
   }
 
 }
@@ -53,13 +61,15 @@ class PickerGeneralBackgroundColorDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userGeneralBackgroundColor", _amValues[0]);
+    App.Properties.setValue("userGeneralBackgroundColor", _amValues[0] as App.PropertyValueType);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

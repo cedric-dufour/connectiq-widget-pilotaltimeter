@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
@@ -27,7 +28,10 @@ class PickerCalibrationQNH extends PickerGenericPressure {
   //
 
   function initialize() {
-    PickerGenericPressure.initialize(Ui.loadResource(Rez.Strings.titleCalibrationQNH), $.oMyAltimeter.fQNH, $.oMySettings.iUnitPressure, false);
+    PickerGenericPressure.initialize(Ui.loadResource(Rez.Strings.titleCalibrationQNH) as String,
+                                     $.oMyAltimeter.fQNH,
+                                     $.oMySettings.iUnitPressure,
+                                     false);
   }
 
 }
@@ -46,13 +50,15 @@ class PickerCalibrationQNHDelegate extends Ui.PickerDelegate {
     // Calibrate altimeter, set property and exit
     var fValue = PickerGenericPressure.getValue(_amValues, $.oMySettings.iUnitPressure);
     $.oMyAltimeter.setQNH(fValue);
-    App.Properties.setValue("userCalibrationQNH", $.oMyAltimeter.fQNH);
+    App.Properties.setValue("userCalibrationQNH", $.oMyAltimeter.fQNH as App.PropertyValueType);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
   function onCancel() {
     // Exit
     Ui.popView(Ui.SLIDE_IMMEDIATE);
+    return true;
   }
 
 }

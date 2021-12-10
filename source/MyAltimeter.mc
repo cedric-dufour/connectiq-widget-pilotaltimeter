@@ -16,7 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
-using Toybox.Lang;
+import Toybox.Lang;
 using Toybox.Math;
 using Toybox.System as Sys;
 
@@ -55,31 +55,30 @@ class MyAltimeter {
   //
 
   // Pressure
-  public var fQNH;  // [Pa]
-  public var fQFE_raw;  // [Pa]
-  public var fQFE;  // [Pa]
+  public var fQNH as Float = 101325.0f;  // [Pa]
+  public var fQFE_raw as Float?;  // [Pa]
+  public var fQFE as Float?;  // [Pa]
 
   // Altitude
-  public var fAltitudeISA;  // [m]
-  public var fAltitudeActual;  // [m]
-  public var fAltitudeDensity;  // [m]
+  public var fAltitudeISA as Float?;  // [m]
+  public var fAltitudeActual as Float?;  // [m]
+  public var fAltitudeDensity as Float?;  // [m]
 
   // Temperature
-  public var fTemperatureISA;  // [°K]
-  public var fTemperatureActual;  // [°K]
-  private var bTemperatureActualSet;
+  public var fTemperatureISA as Float?;  // [°K]
+  public var fTemperatureActual as Float?;  // [°K]
+  private var bTemperatureActualSet as Boolean = false;
 
-  
+
   //
   // FUNCTIONS: self
   //
 
   function initialize() {
-    self.fQNH = self.ISA_PRESSURE_MSL;
     self.reset();
   }
 
-  function reset() {
+  function reset() as Void {
     // Pressure
     self.fQFE_raw = null;
     self.fQFE = null;
@@ -95,75 +94,71 @@ class MyAltimeter {
     self.bTemperatureActualSet = false;
   }
 
-  function importSettings() {
+  function importSettings() as Void {
     // QNH
     self.fQNH = $.oMySettings.fCalibrationQNH;
   }
 
-  function setQFE(_fQFE) {  // [Pa]
+  function setQFE(_fQFE as Float) as Void {  // [Pa]
     // Raw sensor value
     self.fQFE_raw = _fQFE;
-    //Sys.println(Lang.format("DEBUG: QFE (raw) = $1$", [self.fQFE_raw]));
+    //Sys.println(format("DEBUG: QFE (raw) = $1$", [self.fQFE_raw]));
 
     // Calibrated value
     self.fQFE = self.fQFE_raw * $.oMySettings.fCorrectionRelative + $.oMySettings.fCorrectionAbsolute;
-    //Sys.println(Lang.format("DEBUG: QFE (calibrated) = $1$", [self.fQFE]));
+    //Sys.println(format("DEBUG: QFE (calibrated) = $1$", [self.fQFE]));
 
     // Derive altitudes (ICAO formula)
     // ... ISA (QNH=QNE)
-    self.fAltitudeISA = self.ICAO_ALTITUDE_K1 + self.ICAO_ALTITUDE_K2 * Math.pow(self.fQFE/100.0f, self.ICAO_ALTITUDE_EXP);
-    //Sys.println(Lang.format("DEBUG: Altitude, ISA = $1$", [self.fAltitudeISA]));
+    self.fAltitudeISA = self.ICAO_ALTITUDE_K1 + self.ICAO_ALTITUDE_K2 * Math.pow(self.fQFE/100.0f, self.ICAO_ALTITUDE_EXP).toFloat();
+    //Sys.println(format("DEBUG: Altitude, ISA = $1$", [self.fAltitudeISA]));
     // ... actual
-    self.fAltitudeActual = self.fAltitudeISA - (Math.pow(self.fQNH/self.ISA_PRESSURE_MSL, self.ICAO_ALTITUDE_EXP) - 1.0f)*self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE;
-    //Sys.println(Lang.format("DEBUG: Altitude, actual = $1$", [self.fAltitudeActual]));
+    self.fAltitudeActual = self.fAltitudeISA - (Math.pow(self.fQNH/self.ISA_PRESSURE_MSL, self.ICAO_ALTITUDE_EXP).toFloat() - 1.0f)*self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE;
+    //Sys.println(format("DEBUG: Altitude, actual = $1$", [self.fAltitudeActual]));
 
     // Post-process
     self.postProcess();
   }
 
-  function setQNH(_fQNH) {  // [Pa]
+  function setQNH(_fQNH as Float) as Void {  // [Pa]
     // QNH
     self.fQNH = _fQNH;
 
     // ISA altitude (<-> QFE) available ?
-    if(self.fAltitudeISA == null) {
-      return;
+    if(self.fAltitudeISA != null) {
+      // Derive altitude (ICAO formula)
+      // ... actual
+      self.fAltitudeActual = (self.fAltitudeISA as Float) - (Math.pow(self.fQNH/self.ISA_PRESSURE_MSL, self.ICAO_ALTITUDE_EXP).toFloat() - 1.0f)*self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE;
+      //Sys.println(format("DEBUG: Altitude, actual = $1$", [self.fAltitudeActual]));
+
+      // Post-process
+      self.postProcess();
     }
-
-    // Derive altitude (ICAO formula)
-    // ... actual
-    self.fAltitudeActual = self.fAltitudeISA - (Math.pow(self.fQNH/self.ISA_PRESSURE_MSL, self.ICAO_ALTITUDE_EXP) - 1.0f)*self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE;
-    //Sys.println(Lang.format("DEBUG: Altitude, actual = $1$", [self.fAltitudeActual]));
-
-    // Post-process
-    self.postProcess();
   }
 
-  function setAltitudeActual(_fAltitudeActual) {  // [m]
+  function setAltitudeActual(_fAltitudeActual as Float) as Void {  // [m]
     // ISA altitude (<-> QFE) available ?
-    if(self.fAltitudeISA == null) {
-      return;
+    if(self.fAltitudeISA != null) {
+      // Derive QNH (ICAO formula)
+      self.fQNH = self.ISA_PRESSURE_MSL * Math.pow(1.0f + self.ISA_TEMPERATURE_LRATE*((self.fAltitudeISA as Float)-_fAltitudeActual)/self.ISA_TEMPERATURE_MSL, self.ICAO_PRESSURE_EXP).toFloat();
+      //Sys.println(format("DEBUG: QNH = $1$", [self.fQNH]));
+
+      // Save altitude
+      // ... actual
+      self.fAltitudeActual = _fAltitudeActual;
+
+      // Post-process
+      self.postProcess();
     }
-    
-    // Derive QNH (ICAO formula)
-    self.fQNH = self.ISA_PRESSURE_MSL * Math.pow(1.0f + self.ISA_TEMPERATURE_LRATE*(self.fAltitudeISA-_fAltitudeActual)/self.ISA_TEMPERATURE_MSL, self.ICAO_PRESSURE_EXP);
-    //Sys.println(Lang.format("DEBUG: QNH = $1$", [self.fQNH]));
-
-    // Save altitude
-    // ... actual
-    self.fAltitudeActual = _fAltitudeActual;
-
-    // Post-process
-    self.postProcess();
   }
 
-  function setTemperatureActual(_fTemperatureActual) {  // [°K]
+  function setTemperatureActual(_fTemperatureActual as Float?) as Void {  // [°K]
     // Save temperature
     // ... actual
     if(_fTemperatureActual != null) {
       self.fTemperatureActual = _fTemperatureActual;
       self.bTemperatureActualSet = true;
-      //Sys.println(Lang.format("DEBUG: Temperature, actual (set) = $1$", [self.fTemperatureActual]));
+      //Sys.println(format("DEBUG: Temperature, actual (set) = $1$", [self.fTemperatureActual]));
     }
     else {
       self.bTemperatureActualSet = false;
@@ -173,22 +168,21 @@ class MyAltimeter {
     // NO! This only affects Density Altitude, which will be updated on setQFE()
   }
 
-  function postProcess() {
+  function postProcess() as Void {
     // Derive temperature
     // ... ISA
-    self.fTemperatureISA = self.ISA_TEMPERATURE_MSL + self.ISA_TEMPERATURE_LRATE * self.fAltitudeActual;
-    //Sys.println(Lang.format("DEBUG: Temperature, ISA = $1$", [self.fTemperatureISA]));
+    self.fTemperatureISA = self.ISA_TEMPERATURE_MSL + self.ISA_TEMPERATURE_LRATE * (self.fAltitudeActual as Float);
+    //Sys.println(format("DEBUG: Temperature, ISA = $1$", [self.fTemperatureISA]));
     // ... actual
     if(!self.bTemperatureActualSet or self.fTemperatureActual == null) {
-      self.fTemperatureActual = self.fTemperatureISA + $.oMySettings.fReferenceTemperatureISAOffset;
+      self.fTemperatureActual = (self.fTemperatureISA as Float) + $.oMySettings.fReferenceTemperatureISAOffset;
     }
-    //Sys.println(Lang.format("DEBUG: Temperature, actual (calculated) = $1$", [self.fTemperatureActual]));
+    //Sys.println(format("DEBUG: Temperature, actual (calculated) = $1$", [self.fTemperatureActual]));
 
     // Derive altitude
     // ... density
-    self.fAltitudeDensity = self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE * (Math.pow(self.fQFE*self.ISA_TEMPERATURE_MSL/self.ISA_PRESSURE_MSL/self.fTemperatureActual, self.DA_EXP) - 1.0f);
-    //Sys.println(Lang.format("DEBUG: Altitude, density = $1$", [self.fAltitudeDensity]));
+    self.fAltitudeDensity = self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE * (Math.pow((self.fQFE as Float)*self.ISA_TEMPERATURE_MSL/self.ISA_PRESSURE_MSL/(self.fTemperatureActual as Float), self.DA_EXP).toFloat() - 1.0f);
+    //Sys.println(format("DEBUG: Altitude, density = $1$", [self.fAltitudeDensity]));
   }
 
 }
-

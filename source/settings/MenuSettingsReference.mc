@@ -16,6 +16,7 @@
 // SPDX-License-Identifier: GPL-3.0
 // License-Filename: LICENSE/GPL-3.0.txt
 
+import Toybox.Lang;
 using Toybox.System as Sys;
 using Toybox.WatchUi as Ui;
 
@@ -27,12 +28,12 @@ class MenuSettingsReference extends Ui.Menu {
 
   function initialize() {
     Menu.initialize();
-    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsReference));
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceElevation), :menuReferenceElevation);
+    Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsReference) as String);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceElevation) as String, :menuReferenceElevation);
     if($.oMyAltimeter.fQFE != null) {
-      Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceTemperature), :menuReferenceTemperature);
+      Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceTemperature) as String, :menuReferenceTemperature);
     }
-    Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceTemperatureAuto), :menuReferenceTemperatureAuto);
+    Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceTemperatureAuto) as String, :menuReferenceTemperatureAuto);
   }
 
 }
@@ -50,15 +51,21 @@ class MenuSettingsReferenceDelegate extends Ui.MenuInputDelegate {
   function onMenuItem(item) {
     if (item == :menuReferenceElevation) {
       //Sys.println("DEBUG: MenuSettingsReferenceDelegate.onMenuItem(:menuReferenceElevation)");
-      Ui.pushView(new PickerReferenceElevation(), new PickerReferenceElevationDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerReferenceElevation(),
+                  new PickerReferenceElevationDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
     else if (item == :menuReferenceTemperature) {
       //Sys.println("DEBUG: MenuSettingsReferenceDelegate.onMenuItem(:menuReferenceTemperature)");
-      Ui.pushView(new PickerReferenceTemperature(), new PickerReferenceTemperatureDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerReferenceTemperature(),
+                  new PickerReferenceTemperatureDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
     else if (item == :menuReferenceTemperatureAuto) {
       //Sys.println("DEBUG: MenuSettingsReferenceDelegate.onMenuItem(:menuReferenceTemperatureAuto)");
-      Ui.pushView(new PickerReferenceTemperatureAuto(), new PickerReferenceTemperatureAutoDelegate(), Ui.SLIDE_IMMEDIATE);
+      Ui.pushView(new PickerReferenceTemperatureAuto(),
+                  new PickerReferenceTemperatureAutoDelegate(),
+                  Ui.SLIDE_IMMEDIATE);
     }
   }
 
