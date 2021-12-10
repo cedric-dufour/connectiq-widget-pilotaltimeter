@@ -27,7 +27,7 @@ class PickerCorrectionAbsolute extends PickerGenericPressure {
   //
 
   function initialize() {
-    PickerGenericPressure.initialize(Ui.loadResource(Rez.Strings.titleCorrectionAbsolute), App.Properties.getValue("userCorrectionAbsolute"), $.PA_oSettings.iUnitPressure, true);
+    PickerGenericPressure.initialize(Ui.loadResource(Rez.Strings.titleCorrectionAbsolute), App.Properties.getValue("userCorrectionAbsolute"), $.oMySettings.iUnitPressure, true);
   }
 
 }
@@ -44,7 +44,7 @@ class PickerCorrectionAbsoluteDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userCorrectionAbsolute", PickerGenericPressure.getValue(_amValues, $.PA_oSettings.iUnitPressure));
+    App.Properties.setValue("userCorrectionAbsolute", PickerGenericPressure.getValue(_amValues, $.oMySettings.iUnitPressure));
     Ui.popView(Ui.SLIDE_IMMEDIATE);
   }
 

@@ -27,7 +27,7 @@ class PickerCalibrationQNH extends PickerGenericPressure {
   //
 
   function initialize() {
-    PickerGenericPressure.initialize(Ui.loadResource(Rez.Strings.titleCalibrationQNH), $.PA_oAltimeter.fQNH, $.PA_oSettings.iUnitPressure, false);
+    PickerGenericPressure.initialize(Ui.loadResource(Rez.Strings.titleCalibrationQNH), $.oMyAltimeter.fQNH, $.oMySettings.iUnitPressure, false);
   }
 
 }
@@ -44,9 +44,9 @@ class PickerCalibrationQNHDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Calibrate altimeter, set property and exit
-    var fValue = PickerGenericPressure.getValue(_amValues, $.PA_oSettings.iUnitPressure);
-    $.PA_oAltimeter.setQNH(fValue);
-    App.Properties.setValue("userCalibrationQNH", $.PA_oAltimeter.fQNH);
+    var fValue = PickerGenericPressure.getValue(_amValues, $.oMySettings.iUnitPressure);
+    $.oMyAltimeter.setQNH(fValue);
+    App.Properties.setValue("userCalibrationQNH", $.oMyAltimeter.fQNH);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
   }
 

@@ -27,7 +27,7 @@ class PickerCalibrationElevation extends PickerGenericElevation {
   //
 
   function initialize() {
-    PickerGenericElevation.initialize(Ui.loadResource(Rez.Strings.titleCalibrationElevation), $.PA_oAltimeter.fAltitudeActual, $.PA_oSettings.iUnitElevation, false);
+    PickerGenericElevation.initialize(Ui.loadResource(Rez.Strings.titleCalibrationElevation), $.oMyAltimeter.fAltitudeActual, $.oMySettings.iUnitElevation, false);
   }
 
 }
@@ -44,9 +44,9 @@ class PickerCalibrationElevationDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Calibrate altimeter, set property (QNH) and exit
-    var fValue = PickerGenericElevation.getValue(_amValues, $.PA_oSettings.iUnitElevation);
-    $.PA_oAltimeter.setAltitudeActual(fValue);
-    App.Properties.setValue("userCalibrationQNH", $.PA_oAltimeter.fQNH);
+    var fValue = PickerGenericElevation.getValue(_amValues, $.oMySettings.iUnitElevation);
+    $.oMyAltimeter.setAltitudeActual(fValue);
+    App.Properties.setValue("userCalibrationQNH", $.oMyAltimeter.fQNH);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
   }
 

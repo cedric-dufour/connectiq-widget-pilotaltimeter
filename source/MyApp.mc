@@ -27,20 +27,20 @@ using Toybox.Timer;
 //
 
 // Application settings
-var PA_oSettings = null;
+var oMySettings = null;
 
 // Altimeter data
-var PA_oAltimeter = null;
+var oMyAltimeter = null;
 
 // Current view
-var PA_oCurrentView = null;
+var oMyView = null;
 
 
 //
 // CLASS
 //
 
-class PA_App extends App.AppBase {
+class MyApp extends App.AppBase {
 
   //
   // VARIABLES
@@ -58,17 +58,17 @@ class PA_App extends App.AppBase {
     AppBase.initialize();
 
     // Application settings
-    $.PA_oSettings = new PA_Settings();
+    $.oMySettings = new MySettings();
 
     // Altimeter data
-    $.PA_oAltimeter = new PA_Altimeter();
+    $.oMyAltimeter = new MyAltimeter();
 
     // UI update time
     self.oUpdateTimer = null;
   }
 
   function onStart(state) {
-    //Sys.println("DEBUG: PA_App.onStart()");
+    //Sys.println("DEBUG: MyApp.onStart()");
 
     // Enable sensor events
     Sensor.setEnabledSensors([Sensor.SENSOR_TEMPERATURE]);
@@ -87,7 +87,7 @@ class PA_App extends App.AppBase {
   }
 
   function onStop(state) {
-    //Sys.println("DEBUG: PA_App.onStop()");
+    //Sys.println("DEBUG: MyApp.onStop()");
 
     // Stop UI update timer
     if(self.oUpdateTimer != null) {
@@ -100,13 +100,13 @@ class PA_App extends App.AppBase {
   }
 
   function getInitialView() {
-    //Sys.println("DEBUG: PA_App.getInitialView()");
+    //Sys.println("DEBUG: MyApp.getInitialView()");
 
-    return [new PA_View(), new PA_ViewDelegate()];
+    return [new MyView(), new MyViewDelegate()];
   }
 
   function onSettingsChanged() {
-    //Sys.println("DEBUG: PA_App.onSettingsChanged()");
+    //Sys.println("DEBUG: MyApp.onSettingsChanged()");
     self.updateApp();
   }
 
@@ -116,40 +116,40 @@ class PA_App extends App.AppBase {
   //
 
   function updateApp() {
-    //Sys.println("DEBUG: PA_App.updateApp()");
+    //Sys.println("DEBUG: MyApp.updateApp()");
 
     // Load settings
     self.loadSettings();
-    $.PA_oAltimeter.importSettings();
+    $.oMyAltimeter.importSettings();
 
     // Update UI
     self.updateUi();
   }
 
   function loadSettings() {
-    //Sys.println("DEBUG: PA_App.loadSettings()");
+    //Sys.println("DEBUG: MyApp.loadSettings()");
 
     // Load settings
-    $.PA_oSettings.load();
+    $.oMySettings.load();
   }
 
   function onSensorEvent(_oSensorInfo) {
-    //Sys.println("DEBUG: PA_App.onSensorEvent());
+    //Sys.println("DEBUG: MyApp.onSensorEvent());
 
     // Process sensor data
     // ... temperature
-    if($.PA_oSettings.bReferenceTemperatureAuto) {
+    if($.oMySettings.bReferenceTemperatureAuto) {
       if(_oSensorInfo has :temperature and _oSensorInfo.temperature != null) {
-        $.PA_oAltimeter.setTemperatureActual(_oSensorInfo.temperature+273.15f);  // ... altimeter internals are °K
+        $.oMyAltimeter.setTemperatureActual(_oSensorInfo.temperature+273.15f);  // ... altimeter internals are °K
       }
     }
     else {
-      $.PA_oAltimeter.setTemperatureActual(null);
+      $.oMyAltimeter.setTemperatureActual(null);
     }
     // ... pressure
     var oActivityInfo = Activity.getActivityInfo();  // ... we need *raw ambient* pressure
     if(oActivityInfo has :ambientPressure and oActivityInfo.ambientPressure != null) {
-      $.PA_oAltimeter.setQFE(oActivityInfo.ambientPressure);
+      $.oMyAltimeter.setQFE(oActivityInfo.ambientPressure);
     }
 
     // UI update
@@ -157,23 +157,23 @@ class PA_App extends App.AppBase {
   }
 
   function onUpdateTimer_init() {
-    //Sys.println("DEBUG: PH_App.onUpdateTimer_init()");
+    //Sys.println("DEBUG: MyApp.onUpdateTimer_init()");
     self.onUpdateTimer();
     self.oUpdateTimer = new Timer.Timer();
     self.oUpdateTimer.start(method(:onUpdateTimer), 60000, true);
   }
 
   function onUpdateTimer() {
-    //Sys.println("DEBUG: PH_App.onUpdateTimer()");
+    //Sys.println("DEBUG: MyApp.onUpdateTimer()");
     self.updateUi();
   }
 
   function updateUi() {
-    //Sys.println("DEBUG: PA_App.updateUi()");
+    //Sys.println("DEBUG: MyApp.updateUi()");
 
     // Update UI
-    if($.PA_oCurrentView != null) {
-      $.PA_oCurrentView.updateUi();
+    if($.oMyView != null) {
+      $.oMyView.updateUi();
     }
   }
 

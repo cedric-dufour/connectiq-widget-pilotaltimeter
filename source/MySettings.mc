@@ -20,7 +20,7 @@ using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
-class PA_Settings {
+class MySettings {
 
   //
   // VARIABLES

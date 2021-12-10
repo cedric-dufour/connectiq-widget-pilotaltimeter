@@ -29,7 +29,7 @@ using Toybox.System as Sys;
 // CLASS
 //
 
-class PA_Altimeter {
+class MyAltimeter {
 
   //
   // CONSTANTS
@@ -97,7 +97,7 @@ class PA_Altimeter {
 
   function importSettings() {
     // QNH
-    self.fQNH = $.PA_oSettings.fCalibrationQNH;
+    self.fQNH = $.oMySettings.fCalibrationQNH;
   }
 
   function setQFE(_fQFE) {  // [Pa]
@@ -106,7 +106,7 @@ class PA_Altimeter {
     //Sys.println(Lang.format("DEBUG: QFE (raw) = $1$", [self.fQFE_raw]));
 
     // Calibrated value
-    self.fQFE = self.fQFE_raw * $.PA_oSettings.fCorrectionRelative + $.PA_oSettings.fCorrectionAbsolute;
+    self.fQFE = self.fQFE_raw * $.oMySettings.fCorrectionRelative + $.oMySettings.fCorrectionAbsolute;
     //Sys.println(Lang.format("DEBUG: QFE (calibrated) = $1$", [self.fQFE]));
 
     // Derive altitudes (ICAO formula)
@@ -180,7 +180,7 @@ class PA_Altimeter {
     //Sys.println(Lang.format("DEBUG: Temperature, ISA = $1$", [self.fTemperatureISA]));
     // ... actual
     if(!self.bTemperatureActualSet or self.fTemperatureActual == null) {
-      self.fTemperatureActual = self.fTemperatureISA + $.PA_oSettings.fReferenceTemperatureISAOffset;
+      self.fTemperatureActual = self.fTemperatureISA + $.oMySettings.fReferenceTemperatureISAOffset;
     }
     //Sys.println(Lang.format("DEBUG: Temperature, actual (calculated) = $1$", [self.fTemperatureActual]));
 

@@ -23,7 +23,7 @@ using Toybox.WatchUi as Ui;
 // CLASS
 //
 
-class PA_Drawable extends Ui.Drawable {
+class MyDrawable extends Ui.Drawable {
 
   //
   // VARIABLES
@@ -38,7 +38,7 @@ class PA_Drawable extends Ui.Drawable {
   //
 
   function initialize() {
-    Drawable.initialize({ :identifier => "PA_Drawable" });
+    Drawable.initialize({ :identifier => "MyDrawable" });
 
     // Background color
     self.iColorBackground = Gfx.COLOR_BLACK;

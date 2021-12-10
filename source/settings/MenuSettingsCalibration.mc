@@ -29,7 +29,7 @@ class MenuSettingsCalibration extends Ui.Menu {
     Menu.initialize();
     Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsCalibration));
     Menu.addItem(Ui.loadResource(Rez.Strings.titleCalibrationQNH), :menuCalibrationQNH);
-    if($.PA_oAltimeter.fAltitudeActual != null) {
+    if($.oMyAltimeter.fAltitudeActual != null) {
       Menu.addItem(Ui.loadResource(Rez.Strings.titleCalibrationElevation), :menuCalibrationElevation);
     }
   }

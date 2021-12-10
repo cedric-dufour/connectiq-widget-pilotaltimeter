@@ -27,7 +27,7 @@ class PickerReferenceElevation extends PickerGenericElevation {
   //
 
   function initialize() {
-    PickerGenericElevation.initialize(Ui.loadResource(Rez.Strings.titleReferenceElevation), App.Properties.getValue("userReferenceElevation"), $.PA_oSettings.iUnitElevation, false);
+    PickerGenericElevation.initialize(Ui.loadResource(Rez.Strings.titleReferenceElevation), App.Properties.getValue("userReferenceElevation"), $.oMySettings.iUnitElevation, false);
   }
 
 }
@@ -44,7 +44,7 @@ class PickerReferenceElevationDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userReferenceElevation", PickerGenericElevation.getValue(_amValues, $.PA_oSettings.iUnitElevation));
+    App.Properties.setValue("userReferenceElevation", PickerGenericElevation.getValue(_amValues, $.oMySettings.iUnitElevation));
     Ui.popView(Ui.SLIDE_IMMEDIATE);
   }
 

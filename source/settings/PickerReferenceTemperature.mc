@@ -27,7 +27,7 @@ class PickerReferenceTemperature extends PickerGenericTemperature {
   //
 
   function initialize() {
-    PickerGenericTemperature.initialize(Ui.loadResource(Rez.Strings.titleReferenceTemperature), $.PA_oAltimeter.fTemperatureActual, $.PA_oSettings.iUnitTemperature, true);
+    PickerGenericTemperature.initialize(Ui.loadResource(Rez.Strings.titleReferenceTemperature), $.oMyAltimeter.fTemperatureActual, $.oMySettings.iUnitTemperature, true);
   }
 
 }
@@ -44,8 +44,8 @@ class PickerReferenceTemperatureDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    var fValue = PickerGenericTemperature.getValue(_amValues, $.PA_oSettings.iUnitTemperature);
-    fValue -= $.PA_oAltimeter.fTemperatureISA;
+    var fValue = PickerGenericTemperature.getValue(_amValues, $.oMySettings.iUnitTemperature);
+    fValue -= $.oMyAltimeter.fTemperatureISA;
     App.Properties.setValue("userReferenceTemperatureISAOffset", fValue);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
   }
