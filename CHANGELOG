@@ -1,3 +1,6 @@
+* 1.0.20211218a:
+  - NEW: Add all currently supported models
+
 * 1.0.20181215a:
   - MOD: Switched data filtering to Garmin's internal algorithm
 
