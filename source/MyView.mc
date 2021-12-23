@@ -186,146 +186,139 @@ class MyView extends Ui.View {
     }
 
     // Set field values
+    if(self.oRezLabelTop == null or self.oRezLabelBottom == null) {
+      return;
+    }
     if($.iMyViewIndex == 0) {
+
       // ... actual altitude
-      if(self.oRezLabelTop != null) {
-        if($.sMyViewLabelTop == null) {
-          $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeActual) as String;
-        }
-        (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-        if($.oMyAltimeter.fAltitudeActual != null) {
-          (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeActual as Float, false));
-        }
-        else {
-          (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelTop == null) {
+        $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeActual) as String;
+      }
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
+      if($.oMyAltimeter.fAltitudeActual != null) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeActual as Float, false));
+      }
+      else {
+        (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... QNH
-      if(self.oRezLabelBottom != null) {
-        if($.sMyViewLabelBottom == null) {
-          $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelPressureQNH) as String;
-        }
-        (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-        if($.oMyAltimeter.fQNH != null) {
-          (self.oRezValueBottom as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQNH));
-        }
-        else {
-          (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelBottom == null) {
+        $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelPressureQNH) as String;
       }
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
+      if($.oMyAltimeter.fQNH != null) {
+        (self.oRezValueBottom as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQNH));
+      }
+      else {
+        (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
+      }
+
     }
     else if($.iMyViewIndex == 1) {
+
       // ... flight level
-      if(self.oRezLabelTop != null) {
-        if($.sMyViewLabelTop == null) {
-          $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeFL) as String;
-        }
-        (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-        if($.oMyAltimeter.fAltitudeActual != null) {
-          (self.oRezValueTop as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA as Float, false));
-        }
-        else {
-          (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelTop == null) {
+        $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeFL) as String;
+      }
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
+      if($.oMyAltimeter.fAltitudeActual != null) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA as Float, false));
+      }
+      else {
+        (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... standard altitude (ISA)
-      if(self.oRezLabelBottom != null) {
-        if($.sMyViewLabelBottom == null) {
-          $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelAltitudeISA) as String;
-        }
-        (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-        if($.oMyAltimeter.fAltitudeISA != null) {
-          (self.oRezValueBottom as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA as Float, true));
-        }
-        else {
-          (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelBottom == null) {
+        $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelAltitudeISA) as String;
       }
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
+      if($.oMyAltimeter.fAltitudeISA != null) {
+        (self.oRezValueBottom as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA as Float, true));
+      }
+      else {
+        (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
+      }
+
     }
     else if($.iMyViewIndex == 2) {
+
       // ... height
-      if(self.oRezLabelTop != null) {
-        if($.sMyViewLabelTop == null) {
-          $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelHeight) as String;
-        }
-        (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-        if($.oMyAltimeter.fAltitudeActual != null and $.oMySettings.fReferenceElevation != null) {
-          (self.oRezValueTop as Ui.Text).setText(self.stringElevation(($.oMyAltimeter.fAltitudeActual as Float)-$.oMySettings.fReferenceElevation, true));
-        }
-        else {
-          (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelTop == null) {
+        $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelHeight) as String;
+      }
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
+      if($.oMyAltimeter.fAltitudeActual != null and $.oMySettings.fReferenceElevation != null) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringElevation(($.oMyAltimeter.fAltitudeActual as Float)-$.oMySettings.fReferenceElevation, true));
+      }
+      else {
+        (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... reference elevation
-      if(self.oRezLabelBottom != null) {
-        if($.sMyViewLabelBottom == null) {
-          $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelElevation) as String;
-        }
-        (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-        if($.oMySettings.fReferenceElevation != null) {
-          (self.oRezValueBottom as Ui.Text).setText(self.stringElevation($.oMySettings.fReferenceElevation, false));
-        }
-        else {
-          (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelBottom == null) {
+        $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelElevation) as String;
       }
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
+      if($.oMySettings.fReferenceElevation != null) {
+        (self.oRezValueBottom as Ui.Text).setText(self.stringElevation($.oMySettings.fReferenceElevation, false));
+      }
+      else {
+        (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
+      }
+
     }
     else if($.iMyViewIndex == 3) {
+
       // ... density altitude
-      if(self.oRezLabelTop != null) {
-        if($.sMyViewLabelTop == null) {
-          $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeDensity) as String;
-        }
-        (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-        if($.oMyAltimeter.fAltitudeDensity != null) {
-          (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeDensity as Float, false));
-        }
-        else {
-          (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelTop == null) {
+        $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeDensity) as String;
+      }
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
+      if($.oMyAltimeter.fAltitudeDensity != null) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeDensity as Float, false));
+      }
+      else {
+        (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... temperature
-      if(self.oRezLabelBottom != null) {
-        if($.sMyViewLabelBottom == null) {
-          $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelTemperature) as String;
-        }
-        (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-        if($.oMyAltimeter.fTemperatureISA != null and $.oMyAltimeter.fTemperatureActual != null) {
-          (self.oRezValueBottom as Ui.Text).setText(format("$1$ / ISA$2$", [self.stringTemperature($.oMyAltimeter.fTemperatureActual as Float, false),
-                                                                            self.stringTemperature(($.oMyAltimeter.fTemperatureActual as Float)-($.oMyAltimeter.fTemperatureISA as Float), true)]));
-        }
-        else {
-          (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelBottom == null) {
+        $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelTemperature) as String;
       }
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
+      if($.oMyAltimeter.fTemperatureISA != null and $.oMyAltimeter.fTemperatureActual != null) {
+        (self.oRezValueBottom as Ui.Text).setText(format("$1$ / ISA$2$", [self.stringTemperature($.oMyAltimeter.fTemperatureActual as Float, false),
+                                                                          self.stringTemperature(($.oMyAltimeter.fTemperatureActual as Float)-($.oMyAltimeter.fTemperatureISA as Float), true)]));
+      }
+      else {
+        (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
+      }
+
     }
     else if($.iMyViewIndex == 4) {
+
       // ... QFE (calibrated)
-      if(self.oRezLabelTop != null) {
-        if($.sMyViewLabelTop == null) {
-          $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelPressureQFE) as String;
-        }
-        (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-        if($.oMyAltimeter.fQFE != null) {
-          (self.oRezValueTop as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQFE as Float));
-        }
-        else {
-          (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelTop == null) {
+        $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelPressureQFE) as String;
+      }
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
+      if($.oMyAltimeter.fQFE != null) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQFE as Float));
+      }
+      else {
+        (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... temperature
-      if(self.oRezLabelBottom != null) {
-        if($.sMyViewLabelBottom == null) {
-          $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelPressureQFERaw) as String;
-        }
-        (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-        if($.oMyAltimeter.fQFE_raw != null) {
-          (self.oRezValueBottom as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQFE_raw as Float));
-        }
-        else {
-          (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
-        }
+      if($.sMyViewLabelBottom == null) {
+        $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelPressureQFERaw) as String;
       }
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
+      if($.oMyAltimeter.fQFE_raw != null) {
+        (self.oRezValueBottom as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQFE_raw as Float));
+      }
+      else {
+        (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
+      }
+
     }
   }
 
