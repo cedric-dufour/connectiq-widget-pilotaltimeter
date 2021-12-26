@@ -1,0 +1,19 @@
+<!-- -*- mode:xml; tab-width:2; c-basic-offset:2; intent-tabs-mode:nil; -*- ex: set tabstop=2 expandtab: -->
+<layouts>
+  <layout id="MyLayout">
+    <drawable class="MyDrawable" />
+    <drawable id="drawContentBorders" />
+    <drawable id="drawDividerHorizontal" />
+    <!-- Header -->
+    <label id="valueDate" x="center" y="1%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY" />
+    <!-- Label -->
+    <label id="labelTop" x="center" y="13%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY" />
+    <!-- Fields -->
+    <label id="valueTop" x="center" y="28%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="@Fonts.FONT_XLARGE" />
+    <label id="valueBottom" x="center" y="62%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_SMALL" />
+    <!-- Label -->
+    <label id="labelBottom" x="center" y="75%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY" />
+    <!-- Footer -->
+    <label id="valueTime" x="center" y="88%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY" />
+  </layout>
+</layouts>

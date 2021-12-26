@@ -29,6 +29,7 @@ using Toybox.System as Sys;
 // CLASS
 //
 
+(:glance)
 class MyAltimeter {
 
   //

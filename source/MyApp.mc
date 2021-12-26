@@ -42,6 +42,7 @@ var oMyView as MyView?;
 // CLASS
 //
 
+(:glance)
 class MyApp extends App.AppBase {
 
   //
