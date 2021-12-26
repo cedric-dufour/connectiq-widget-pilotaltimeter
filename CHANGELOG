@@ -1,5 +1,8 @@
+* 1.0.20211226a:
+  - Added support for 260x260 and 280x280 round devices
+
 * 1.0.20211218a:
-  - NEW: Add all currently supported models
+  - Added all currently supported 240x240 devices
 
 * 1.0.20181215a:
   - MOD: Switched data filtering to Garmin's internal algorithm
