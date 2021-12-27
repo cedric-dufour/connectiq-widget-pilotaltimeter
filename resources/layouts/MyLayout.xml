@@ -12,8 +12,8 @@
     <label id="valueTop" x="center" y="28%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="@Fonts.FONT_XLARGE" />
     <label id="valueBottom" x="center" y="62%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_SMALL" />
     <!-- Label -->
-    <label id="labelBottom" x="center" y="75%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY" />
+    <label id="labelBottom" x="center" y="74%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY" />
     <!-- Footer -->
-    <label id="valueTime" x="center" y="88%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY" />
+    <label id="valueTime" x="center" y="87%" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY" />
   </layout>
 </layouts>
