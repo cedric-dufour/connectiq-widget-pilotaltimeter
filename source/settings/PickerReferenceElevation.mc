@@ -29,7 +29,7 @@ class PickerReferenceElevation extends PickerGenericElevation {
 
   function initialize() {
     PickerGenericElevation.initialize(Ui.loadResource(Rez.Strings.titleReferenceElevation) as String,
-                                      App.Properties.getValue("userReferenceElevation") as Float,
+                                      $.oMySettings.loadReferenceElevation(),
                                       $.oMySettings.iUnitElevation,
                                       false);
   }
@@ -48,8 +48,7 @@ class PickerReferenceElevationDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userReferenceElevation",
-                            PickerGenericElevation.getValue(_amValues, $.oMySettings.iUnitElevation) as App.PropertyValueType);
+    $.oMySettings.saveReferenceElevation(PickerGenericElevation.getValue(_amValues, $.oMySettings.iUnitElevation));
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;
   }

@@ -29,7 +29,7 @@ class PickerCorrectionRelative extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var fValue = (App.Properties.getValue("userCorrectionRelative") as Float)*10000.0f;
+    var fValue = $.oMySettings.loadCorrectionRelative()*10000.0f;
 
     // Split components
     var aiValues = new Array<Number>[5];
@@ -74,8 +74,9 @@ class PickerCorrectionRelativeDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    var fValue = _amValues[0]*10000.0f + _amValues[1]*1000.0f + _amValues[2]*100.0f + _amValues[3]*10.0f + _amValues[4];
-    App.Properties.setValue("userCorrectionRelative", (fValue/10000.0f) as App.PropertyValueType);
+    var aiValues = _amValues as Array<Number>;
+    var fValue = aiValues[0]*10000.0f + aiValues[1]*1000.0f + aiValues[2]*100.0f + aiValues[3]*10.0f + aiValues[4];
+    $.oMySettings.saveCorrectionRelative(fValue/10000.0f);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;
   }

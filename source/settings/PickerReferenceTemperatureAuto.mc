@@ -29,7 +29,7 @@ class PickerReferenceTemperatureAuto extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var bReferenceTemperatureAuto = App.Properties.getValue("userReferenceTemperatureAuto") as Boolean?;
+    var bReferenceTemperatureAuto = $.oMySettings.loadReferenceTemperatureAuto();
 
     // Initialize picker
     var oFactory = new PickerFactoryDictionary([true, false],
@@ -44,7 +44,7 @@ class PickerReferenceTemperatureAuto extends Ui.Picker {
             :locY=>Ui.LAYOUT_VALIGN_BOTTOM,
             :color => Gfx.COLOR_BLUE}),
         :pattern => [oFactory],
-        :defaults => [oFactory.indexOfKey(bReferenceTemperatureAuto != null ? bReferenceTemperatureAuto : false)]});
+        :defaults => [oFactory.indexOfKey(bReferenceTemperatureAuto)]});
   }
 
 }
@@ -61,7 +61,7 @@ class PickerReferenceTemperatureAutoDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userReferenceTemperatureAuto", _amValues[0] as App.PropertyValueType);
+    $.oMySettings.saveReferenceTemperatureAuto(_amValues[0] as Boolean);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;
   }

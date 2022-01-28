@@ -29,7 +29,7 @@ class PickerUnitTimeUTC extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var bUnitTimeUTC = App.Properties.getValue("userUnitTimeUTC") as Boolean?;
+    var bUnitTimeUTC = $.oMySettings.loadUnitTimeUTC();
 
     // Initialize picker
     var oFactory = new PickerFactoryDictionary([false, true],
@@ -44,7 +44,7 @@ class PickerUnitTimeUTC extends Ui.Picker {
             :locY=>Ui.LAYOUT_VALIGN_BOTTOM,
             :color => Gfx.COLOR_BLUE}),
         :pattern => [oFactory],
-        :defaults => [oFactory.indexOfKey(bUnitTimeUTC != null ? bUnitTimeUTC : false)]});
+        :defaults => [oFactory.indexOfKey(bUnitTimeUTC)]});
   }
 
 }
@@ -61,7 +61,7 @@ class PickerUnitTimeUTCDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userUnitTimeUTC", _amValues[0] as App.PropertyValueType);
+    $.oMySettings.saveUnitTimeUTC(_amValues[0] as Boolean);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;
   }

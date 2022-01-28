@@ -29,7 +29,7 @@ class PickerUnitPressure extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var iUnitPressure = App.Properties.getValue("userUnitPressure") as Number?;
+    var iUnitPressure = $.oMySettings.loadUnitPressure();
 
     // Initialize picker
     var oFactory = new PickerFactoryDictionary([-1, 0, 1],
@@ -62,7 +62,7 @@ class PickerUnitPressureDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userUnitPressure", _amValues[0] as App.PropertyValueType);
+    $.oMySettings.saveUnitPressure(_amValues[0] as Number);
     $.oMySettings.load();  // ... use proper units in settings
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;

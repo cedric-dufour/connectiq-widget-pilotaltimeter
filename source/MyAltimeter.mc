@@ -57,17 +57,17 @@ class MyAltimeter {
 
   // Pressure
   public var fQNH as Float = 101325.0f;  // [Pa]
-  public var fQFE_raw as Float?;  // [Pa]
-  public var fQFE as Float?;  // [Pa]
+  public var fQFE_raw as Float = NaN;  // [Pa]
+  public var fQFE as Float = NaN;  // [Pa]
 
   // Altitude
-  public var fAltitudeISA as Float?;  // [m]
-  public var fAltitudeActual as Float?;  // [m]
-  public var fAltitudeDensity as Float?;  // [m]
+  public var fAltitudeISA as Float = NaN;  // [m]
+  public var fAltitudeActual as Float = NaN;  // [m]
+  public var fAltitudeDensity as Float = NaN;  // [m]
 
   // Temperature
-  public var fTemperatureISA as Float?;  // [°K]
-  public var fTemperatureActual as Float?;  // [°K]
+  public var fTemperatureISA as Float = NaN;  // [°K]
+  public var fTemperatureActual as Float = NaN;  // [°K]
   private var bTemperatureActualSet as Boolean = false;
 
 
@@ -75,23 +75,19 @@ class MyAltimeter {
   // FUNCTIONS: self
   //
 
-  function initialize() {
-    self.reset();
-  }
-
   function reset() as Void {
     // Pressure
-    self.fQFE_raw = null;
-    self.fQFE = null;
+    self.fQFE_raw = NaN;
+    self.fQFE = NaN;
 
     // Altitude
-    self.fAltitudeISA = null;
-    self.fAltitudeActual = null;
-    self.fAltitudeDensity = null;
+    self.fAltitudeISA = NaN;
+    self.fAltitudeActual = NaN;
+    self.fAltitudeDensity = NaN;
 
     // Temperature
-    self.fTemperatureISA = null;
-    self.fTemperatureActual = null;
+    self.fTemperatureISA = NaN;
+    self.fTemperatureActual = NaN;
     self.bTemperatureActualSet = false;
   }
 
@@ -112,10 +108,10 @@ class MyAltimeter {
     // Derive altitudes (ICAO formula)
     // ... ISA (QNH=QNE)
     self.fAltitudeISA = self.ICAO_ALTITUDE_K1 + self.ICAO_ALTITUDE_K2 * Math.pow(self.fQFE/100.0f, self.ICAO_ALTITUDE_EXP).toFloat();
-    //Sys.println(format("DEBUG: Altitude, ISA = $1$", [self.fAltitudeISA]));
+    //Sys.println(format("DEBUG: Altitude (ISA) = $1$", [self.fAltitudeISA]));
     // ... actual
     self.fAltitudeActual = self.fAltitudeISA - (Math.pow(self.fQNH/self.ISA_PRESSURE_MSL, self.ICAO_ALTITUDE_EXP).toFloat() - 1.0f)*self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE;
-    //Sys.println(format("DEBUG: Altitude, actual = $1$", [self.fAltitudeActual]));
+    //Sys.println(format("DEBUG: Altitude (actual) = $1$", [self.fAltitudeActual]));
 
     // Post-process
     self.postProcess();
@@ -126,11 +122,11 @@ class MyAltimeter {
     self.fQNH = _fQNH;
 
     // ISA altitude (<-> QFE) available ?
-    if(self.fAltitudeISA != null) {
+    if(LangUtils.notNaN(self.fAltitudeISA)) {
       // Derive altitude (ICAO formula)
       // ... actual
-      self.fAltitudeActual = (self.fAltitudeISA as Float) - (Math.pow(self.fQNH/self.ISA_PRESSURE_MSL, self.ICAO_ALTITUDE_EXP).toFloat() - 1.0f)*self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE;
-      //Sys.println(format("DEBUG: Altitude, actual = $1$", [self.fAltitudeActual]));
+      self.fAltitudeActual = self.fAltitudeISA - (Math.pow(self.fQNH/self.ISA_PRESSURE_MSL, self.ICAO_ALTITUDE_EXP).toFloat() - 1.0f)*self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE;
+      //Sys.println(format("DEBUG: Altitude (actual) = $1$", [self.fAltitudeActual]));
 
       // Post-process
       self.postProcess();
@@ -139,9 +135,9 @@ class MyAltimeter {
 
   function setAltitudeActual(_fAltitudeActual as Float) as Void {  // [m]
     // ISA altitude (<-> QFE) available ?
-    if(self.fAltitudeISA != null) {
+    if(LangUtils.notNaN(self.fAltitudeISA)) {
       // Derive QNH (ICAO formula)
-      self.fQNH = self.ISA_PRESSURE_MSL * Math.pow(1.0f + self.ISA_TEMPERATURE_LRATE*((self.fAltitudeISA as Float)-_fAltitudeActual)/self.ISA_TEMPERATURE_MSL, self.ICAO_PRESSURE_EXP).toFloat();
+      self.fQNH = self.ISA_PRESSURE_MSL * Math.pow(1.0f + self.ISA_TEMPERATURE_LRATE*(self.fAltitudeISA-_fAltitudeActual)/self.ISA_TEMPERATURE_MSL, self.ICAO_PRESSURE_EXP).toFloat();
       //Sys.println(format("DEBUG: QNH = $1$", [self.fQNH]));
 
       // Save altitude
@@ -156,10 +152,10 @@ class MyAltimeter {
   function setTemperatureActual(_fTemperatureActual as Float?) as Void {  // [°K]
     // Save temperature
     // ... actual
-    if(_fTemperatureActual != null) {
+    if(_fTemperatureActual != null and LangUtils.notNaN(_fTemperatureActual)) {
       self.fTemperatureActual = _fTemperatureActual;
       self.bTemperatureActualSet = true;
-      //Sys.println(format("DEBUG: Temperature, actual (set) = $1$", [self.fTemperatureActual]));
+      //Sys.println(format("DEBUG: Temperature (actual) (set) = $1$", [self.fTemperatureActual]));
     }
     else {
       self.bTemperatureActualSet = false;
@@ -172,18 +168,18 @@ class MyAltimeter {
   function postProcess() as Void {
     // Derive temperature
     // ... ISA
-    self.fTemperatureISA = self.ISA_TEMPERATURE_MSL + self.ISA_TEMPERATURE_LRATE * (self.fAltitudeActual as Float);
-    //Sys.println(format("DEBUG: Temperature, ISA = $1$", [self.fTemperatureISA]));
+    self.fTemperatureISA = self.ISA_TEMPERATURE_MSL + self.ISA_TEMPERATURE_LRATE * self.fAltitudeActual;
+    //Sys.println(format("DEBUG: Temperature (ISA) = $1$", [self.fTemperatureISA]));
     // ... actual
-    if(!self.bTemperatureActualSet or self.fTemperatureActual == null) {
-      self.fTemperatureActual = (self.fTemperatureISA as Float) + $.oMySettings.fReferenceTemperatureISAOffset;
+    if(!self.bTemperatureActualSet or LangUtils.isNaN(self.fTemperatureActual)) {
+      self.fTemperatureActual = self.fTemperatureISA + $.oMySettings.fReferenceTemperatureISAOffset;
     }
-    //Sys.println(format("DEBUG: Temperature, actual (calculated) = $1$", [self.fTemperatureActual]));
+    //Sys.println(format("DEBUG: Temperature (actual, calculated) = $1$", [self.fTemperatureActual]));
 
     // Derive altitude
     // ... density
-    self.fAltitudeDensity = self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE * (Math.pow((self.fQFE as Float)*self.ISA_TEMPERATURE_MSL/self.ISA_PRESSURE_MSL/(self.fTemperatureActual as Float), self.DA_EXP).toFloat() - 1.0f);
-    //Sys.println(format("DEBUG: Altitude, density = $1$", [self.fAltitudeDensity]));
+    self.fAltitudeDensity = self.ISA_TEMPERATURE_MSL/self.ISA_TEMPERATURE_LRATE * (Math.pow(self.fQFE*self.ISA_TEMPERATURE_MSL/self.ISA_PRESSURE_MSL/self.fTemperatureActual, self.DA_EXP).toFloat() - 1.0f);
+    //Sys.println(format("DEBUG: Altitude (density) = $1$", [self.fAltitudeDensity]));
   }
 
 }

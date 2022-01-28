@@ -50,7 +50,7 @@ class PickerCalibrationQNHDelegate extends Ui.PickerDelegate {
     // Calibrate altimeter, set property and exit
     var fValue = PickerGenericPressure.getValue(_amValues, $.oMySettings.iUnitPressure);
     $.oMyAltimeter.setQNH(fValue);
-    App.Properties.setValue("userCalibrationQNH", $.oMyAltimeter.fQNH as App.PropertyValueType);
+    $.oMySettings.saveCalibrationQNH($.oMyAltimeter.fQNH);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;
   }

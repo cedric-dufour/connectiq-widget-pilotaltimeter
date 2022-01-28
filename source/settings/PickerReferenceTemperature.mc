@@ -49,10 +49,10 @@ class PickerReferenceTemperatureDelegate extends Ui.PickerDelegate {
   function onAccept(_amValues) {
     // Set property and exit
     var fValue = PickerGenericTemperature.getValue(_amValues, $.oMySettings.iUnitTemperature);
-    if($.oMyAltimeter.fTemperatureISA != null) {
-      fValue -= ($.oMyAltimeter.fTemperatureISA as Float);
+    if(LangUtils.notNaN($.oMyAltimeter.fTemperatureISA)) {
+      fValue -= $.oMyAltimeter.fTemperatureISA;
     }
-    App.Properties.setValue("userReferenceTemperatureISAOffset", fValue as App.PropertyValueType);
+    $.oMySettings.saveReferenceTemperatureISAOffset(fValue);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;
   }

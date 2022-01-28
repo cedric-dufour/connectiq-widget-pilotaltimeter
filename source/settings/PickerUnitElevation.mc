@@ -29,7 +29,7 @@ class PickerUnitElevation extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var iUnitElevation = App.Properties.getValue("userUnitElevation") as Number?;
+    var iUnitElevation = $.oMySettings.loadUnitElevation();
 
     // Initialize picker
     var oFactory = new PickerFactoryDictionary([-1, 0, 1],
@@ -62,7 +62,7 @@ class PickerUnitElevationDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userUnitElevation", _amValues[0] as App.PropertyValueType);
+    $.oMySettings.saveUnitElevation(_amValues[0] as Number);
     $.oMySettings.load();  // ... use proper units in settings
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;

@@ -30,7 +30,7 @@ class MenuSettingsReference extends Ui.Menu {
     Menu.initialize();
     Menu.setTitle(Ui.loadResource(Rez.Strings.titleSettingsReference) as String);
     Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceElevation) as String, :menuReferenceElevation);
-    if($.oMyAltimeter.fQFE != null) {
+    if(LangUtils.notNaN($.oMyAltimeter.fQFE)) {
       Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceTemperature) as String, :menuReferenceTemperature);
     }
     Menu.addItem(Ui.loadResource(Rez.Strings.titleReferenceTemperatureAuto) as String, :menuReferenceTemperatureAuto);

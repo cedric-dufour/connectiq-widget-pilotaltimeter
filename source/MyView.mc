@@ -30,8 +30,8 @@ using Toybox.WatchUi as Ui;
 
 // Current view index and labels
 var iMyViewIndex as Number = 0;
-var sMyViewLabelTop as String?;
-var sMyViewLabelBottom as String?;
+var sMyViewLabelTop as String = "";
+var sMyViewLabelBottom as String = "";
 
 
 //
@@ -192,22 +192,22 @@ class MyView extends Ui.View {
     if($.iMyViewIndex == 0) {
 
       // ... actual altitude
-      if($.sMyViewLabelTop == null) {
+      if($.sMyViewLabelTop.length() == 0) {
         $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeActual) as String;
       }
-      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-      if($.oMyAltimeter.fAltitudeActual != null) {
-        (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeActual as Float, false));
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop);
+      if(LangUtils.notNaN($.oMyAltimeter.fAltitudeActual)) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeActual, false));
       }
       else {
         (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... QNH
-      if($.sMyViewLabelBottom == null) {
+      if($.sMyViewLabelBottom.length() == 0) {
         $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelPressureQNH) as String;
       }
-      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-      if($.oMyAltimeter.fQNH != null) {
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom);
+      if(LangUtils.notNaN($.oMyAltimeter.fQNH)) {
         (self.oRezValueBottom as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQNH));
       }
       else {
@@ -218,23 +218,23 @@ class MyView extends Ui.View {
     else if($.iMyViewIndex == 1) {
 
       // ... flight level
-      if($.sMyViewLabelTop == null) {
+      if($.sMyViewLabelTop.length() == 0) {
         $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeFL) as String;
       }
-      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-      if($.oMyAltimeter.fAltitudeActual != null) {
-        (self.oRezValueTop as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA as Float, false));
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop);
+      if(LangUtils.notNaN($.oMyAltimeter.fAltitudeActual)) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA, false));
       }
       else {
         (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... standard altitude (ISA)
-      if($.sMyViewLabelBottom == null) {
+      if($.sMyViewLabelBottom.length() == 0) {
         $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelAltitudeISA) as String;
       }
-      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-      if($.oMyAltimeter.fAltitudeISA != null) {
-        (self.oRezValueBottom as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA as Float, true));
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom);
+      if(LangUtils.notNaN($.oMyAltimeter.fAltitudeISA)) {
+        (self.oRezValueBottom as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA, true));
       }
       else {
         (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
@@ -244,22 +244,22 @@ class MyView extends Ui.View {
     else if($.iMyViewIndex == 2) {
 
       // ... height
-      if($.sMyViewLabelTop == null) {
+      if($.sMyViewLabelTop.length() == 0) {
         $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelHeight) as String;
       }
-      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-      if($.oMyAltimeter.fAltitudeActual != null and $.oMySettings.fReferenceElevation != null) {
-        (self.oRezValueTop as Ui.Text).setText(self.stringElevation(($.oMyAltimeter.fAltitudeActual as Float)-$.oMySettings.fReferenceElevation, true));
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop);
+      if(LangUtils.notNaN($.oMyAltimeter.fAltitudeActual) and LangUtils.notNaN($.oMySettings.fReferenceElevation)) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeActual-$.oMySettings.fReferenceElevation, true));
       }
       else {
         (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... reference elevation
-      if($.sMyViewLabelBottom == null) {
+      if($.sMyViewLabelBottom.length() == 0) {
         $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelElevation) as String;
       }
-      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-      if($.oMySettings.fReferenceElevation != null) {
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom);
+      if(LangUtils.notNaN($.oMySettings.fReferenceElevation)) {
         (self.oRezValueBottom as Ui.Text).setText(self.stringElevation($.oMySettings.fReferenceElevation, false));
       }
       else {
@@ -270,24 +270,24 @@ class MyView extends Ui.View {
     else if($.iMyViewIndex == 3) {
 
       // ... density altitude
-      if($.sMyViewLabelTop == null) {
+      if($.sMyViewLabelTop.length() == 0) {
         $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeDensity) as String;
       }
-      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-      if($.oMyAltimeter.fAltitudeDensity != null) {
-        (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeDensity as Float, false));
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop);
+      if(LangUtils.notNaN($.oMyAltimeter.fAltitudeDensity)) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringElevation($.oMyAltimeter.fAltitudeDensity, false));
       }
       else {
         (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... temperature
-      if($.sMyViewLabelBottom == null) {
+      if($.sMyViewLabelBottom.length() == 0) {
         $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelTemperature) as String;
       }
-      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-      if($.oMyAltimeter.fTemperatureISA != null and $.oMyAltimeter.fTemperatureActual != null) {
-        (self.oRezValueBottom as Ui.Text).setText(format("$1$ / ISA$2$", [self.stringTemperature($.oMyAltimeter.fTemperatureActual as Float, false),
-                                                                          self.stringTemperature(($.oMyAltimeter.fTemperatureActual as Float)-($.oMyAltimeter.fTemperatureISA as Float), true)]));
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom);
+      if(LangUtils.notNaN($.oMyAltimeter.fTemperatureISA) and LangUtils.notNaN($.oMyAltimeter.fTemperatureActual)) {
+        (self.oRezValueBottom as Ui.Text).setText(format("$1$ / ISA$2$", [self.stringTemperature($.oMyAltimeter.fTemperatureActual, false),
+                                                                          self.stringTemperature($.oMyAltimeter.fTemperatureActual-$.oMyAltimeter.fTemperatureISA, true)]));
       }
       else {
         (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
@@ -297,23 +297,23 @@ class MyView extends Ui.View {
     else if($.iMyViewIndex == 4) {
 
       // ... QFE (calibrated)
-      if($.sMyViewLabelTop == null) {
+      if($.sMyViewLabelTop.length() == 0) {
         $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelPressureQFE) as String;
       }
-      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop as String);
-      if($.oMyAltimeter.fQFE != null) {
-        (self.oRezValueTop as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQFE as Float));
+      (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop);
+      if(LangUtils.notNaN($.oMyAltimeter.fQFE)) {
+        (self.oRezValueTop as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQFE));
       }
       else {
         (self.oRezValueTop as Ui.Text).setText(self.NOVALUE_LEN3);
       }
       // ... temperature
-      if($.sMyViewLabelBottom == null) {
+      if($.sMyViewLabelBottom.length() == 0) {
         $.sMyViewLabelBottom = Ui.loadResource(Rez.Strings.labelPressureQFERaw) as String;
       }
-      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom as String);
-      if($.oMyAltimeter.fQFE_raw != null) {
-        (self.oRezValueBottom as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQFE_raw as Float));
+      (self.oRezLabelBottom as Ui.Text).setText($.sMyViewLabelBottom);
+      if(LangUtils.notNaN($.oMyAltimeter.fQFE_raw)) {
+        (self.oRezValueBottom as Ui.Text).setText(self.stringPressure($.oMyAltimeter.fQFE_raw));
       }
       else {
         (self.oRezValueBottom as Ui.Text).setText(self.NOVALUE_LEN3);
@@ -378,8 +378,8 @@ class MyViewDelegate extends Ui.BehaviorDelegate {
   function onSelect() {
     //Sys.println("DEBUG: MyViewDelegate.onSelect()");
     $.iMyViewIndex = ( $.iMyViewIndex + 1 ) % 5;
-    $.sMyViewLabelTop = null;
-    $.sMyViewLabelBottom = null;
+    $.sMyViewLabelTop = "";
+    $.sMyViewLabelBottom = "";
     Ui.requestUpdate();
     return true;
   }

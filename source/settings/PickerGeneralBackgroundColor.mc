@@ -1,7 +1,7 @@
 // -*- mode:java; tab-width:2; c-basic-offset:2; intent-tabs-mode:nil; -*- ex: set tabstop=2 expandtab:
 
 // Pilot ICAO/ISA Altimeter (PilotAltimeter)
-// Copyright (C) 2018-2021 Cedric Dufour <http://cedric.dufour.name>
+// Copyright (C) 2018-2022 Cedric Dufour <http://cedric.dufour.name>
 //
 // Pilot ICAO/ISA Altimeter (PilotAltimeter) is free software:
 // you can redistribute it and/or modify it under the terms of the GNU General
@@ -29,7 +29,7 @@ class PickerGeneralBackgroundColor extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var iColor = App.Properties.getValue("userGeneralBackgroundColor") as Number?;
+    var iColor = $.oMySettings.loadGeneralBackgroundColor();
 
     // Initialize picker
     var oFactory = new PickerFactoryDictionary([Gfx.COLOR_WHITE, Gfx.COLOR_BLACK],
@@ -44,7 +44,7 @@ class PickerGeneralBackgroundColor extends Ui.Picker {
             :locY=>Ui.LAYOUT_VALIGN_BOTTOM,
             :color => Gfx.COLOR_BLUE}),
         :pattern => [oFactory],
-        :defaults => [oFactory.indexOfKey(iColor != null ? iColor : Gfx.COLOR_BLACK)]});
+        :defaults => [oFactory.indexOfKey(iColor)]});
   }
 
 }
@@ -61,7 +61,7 @@ class PickerGeneralBackgroundColorDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userGeneralBackgroundColor", _amValues[0] as App.PropertyValueType);
+    $.oMySettings.saveGeneralBackgroundColor(_amValues[0] as Number);
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;
   }

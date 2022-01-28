@@ -29,7 +29,7 @@ class PickerUnitTemperature extends Ui.Picker {
 
   function initialize() {
     // Get property
-    var iUnitTemperature = App.Properties.getValue("userUnitTemperature") as Number?;
+    var iUnitTemperature = $.oMySettings.loadUnitTemperature();
 
     // Initialize picker
     var oFactory = new PickerFactoryDictionary([-1, 0, 1],
@@ -62,7 +62,7 @@ class PickerUnitTemperatureDelegate extends Ui.PickerDelegate {
 
   function onAccept(_amValues) {
     // Set property and exit
-    App.Properties.setValue("userUnitTemperature", _amValues[0] as App.PropertyValueType);
+    $.oMySettings.saveUnitTemperature(_amValues[0] as Number);
     $.oMySettings.load();  // ... use proper units in settings
     Ui.popView(Ui.SLIDE_IMMEDIATE);
     return true;

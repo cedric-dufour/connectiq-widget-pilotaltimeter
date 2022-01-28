@@ -41,7 +41,7 @@ class PickerGenericTemperature extends Ui.Picker {
       }
     }
     // ... value
-    var fValue = _fValue != null ? _fValue : 0.0f;
+    var fValue = (_fValue != null and LangUtils.notNaN(_fValue)) ? _fValue : 0.0f;
 
     // Use user-specified temperature unit (NB: SI units are always used internally)
     // PRECISION: 0.1 (* 10)
