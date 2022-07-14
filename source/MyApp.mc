@@ -29,12 +29,17 @@ using Toybox.WatchUi as Ui;
 //
 
 // Application settings
+(:glance)
 var oMySettings as MySettings = new MySettings();
 
 // Altimeter data
+(:glance)
 var oMyAltimeter as MyAltimeter = new MyAltimeter();
 
 // Current view
+(:glance)
+var oMyGlanceView as MyGlanceView?;
+(:glance)
 var oMyView as MyView?;
 
 
@@ -92,6 +97,12 @@ class MyApp extends App.AppBase {
     // Disable sensor events
     Sensor.setEnabledSensors([] as Array<Sensor.SensorType>);
     Sensor.enableSensorEvents(null);
+  }
+
+  function getGlanceView() {
+    //Sys.println("DEBUG: MyApp.getGlanceView()");
+
+    return [new MyGlanceView(), new MyGlanceViewDelegate()] as Array<Ui.GlanceView>?;
   }
 
   function getInitialView() {
@@ -169,7 +180,10 @@ class MyApp extends App.AppBase {
     //Sys.println("DEBUG: MyApp.updateUi()");
 
     // Update UI
-    if($.oMyView != null) {
+    if($.oMyGlanceView != null) {
+      ($.oMyGlanceView as MyGlanceView).updateUi();
+    }
+    else if($.oMyView != null) {
       ($.oMyView as MyView).updateUi();
     }
   }
