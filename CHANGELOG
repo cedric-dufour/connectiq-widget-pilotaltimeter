@@ -1,3 +1,7 @@
+* 1.0.20220714a:
+  - FIX: Crash after settings are edited in Garmin Connect
+  - NEW: add Glance view
+
 * 1.0.20220128a:
   - Added support for Fenix 7 devices
 
@@ -19,4 +23,3 @@
 
 * 1.0.20180915a
   - Post Tenebras Lux
-
