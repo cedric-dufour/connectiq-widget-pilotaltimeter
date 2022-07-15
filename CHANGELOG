@@ -1,3 +1,6 @@
+* 1.0.20220715a:
+  - MOD: improve Glance view
+
 * 1.0.20220714a:
   - FIX: Crash after settings are edited in Garmin Connect
   - NEW: add Glance view
