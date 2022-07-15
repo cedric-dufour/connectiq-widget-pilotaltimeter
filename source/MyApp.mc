@@ -102,7 +102,7 @@ class MyApp extends App.AppBase {
   function getGlanceView() {
     //Sys.println("DEBUG: MyApp.getGlanceView()");
 
-    return [new MyGlanceView(), new MyGlanceViewDelegate()] as Array<Ui.GlanceView>?;
+    return [new MyGlanceView()] as Array<Ui.GlanceView>?;
   }
 
   function getInitialView() {

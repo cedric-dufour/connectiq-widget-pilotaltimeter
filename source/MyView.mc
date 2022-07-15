@@ -222,7 +222,7 @@ class MyView extends Ui.View {
         $.sMyViewLabelTop = Ui.loadResource(Rez.Strings.labelAltitudeFL) as String;
       }
       (self.oRezLabelTop as Ui.Text).setText($.sMyViewLabelTop);
-      if(LangUtils.notNaN($.oMyAltimeter.fAltitudeActual)) {
+      if(LangUtils.notNaN($.oMyAltimeter.fAltitudeISA)) {
         (self.oRezValueTop as Ui.Text).setText(self.stringFlightLevel($.oMyAltimeter.fAltitudeISA, false));
       }
       else {

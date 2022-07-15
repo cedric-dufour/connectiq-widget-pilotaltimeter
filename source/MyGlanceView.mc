@@ -33,7 +33,7 @@ class MyGlanceView extends Ui.GlanceView {
   // CONSTANTS
   //
 
-  private const NOVALUE_BLANK = "";
+  private const NOVALUE_LEN2 = "--";
   private const NOVALUE_LEN3 = "---";
 
 
@@ -43,6 +43,12 @@ class MyGlanceView extends Ui.GlanceView {
 
   // Display mode (internal)
   private var bShow as Boolean = false;
+
+  // Layout
+  private var iXCenter as Number = 0;
+  private var iXLeft as Number = 0;
+  private var iYLine2 as Number = 0;
+  private var iYLine3 as Number = 0;
 
 
   //
@@ -57,6 +63,14 @@ class MyGlanceView extends Ui.GlanceView {
   //
   // FUNCTIONS: Ui.View (override/implement)
   //
+
+  function onLayout(_oDC) {
+    // Layout
+    self.iXCenter = (0.50*_oDC.getWidth()).toNumber();
+    self.iXLeft = _oDC.getWidth();
+    self.iYLine2 = (0.25*_oDC.getHeight()).toNumber();
+    self.iYLine3 = (0.67*_oDC.getHeight()).toNumber();
+  }
 
   function onShow() {
     //Sys.println("DEBUG: MyGlanceView.onShow()");
@@ -77,30 +91,62 @@ class MyGlanceView extends Ui.GlanceView {
     _oDC.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
     _oDC.drawText(0, 0, Gfx.FONT_GLANCE, "PILOT ALTIMETER", Gfx.TEXT_JUSTIFY_LEFT);
 
-    // Values
+    // Values (line 2)
     var fValue, sValue;
+    _oDC.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
 
     // ... actual altitude
     if(LangUtils.notNaN($.oMyAltimeter.fAltitudeActual)) {
       fValue = $.oMyAltimeter.fAltitudeActual * $.oMySettings.fUnitElevationCoefficient;
-      sValue = format("$1$ $2$", [fValue.format("%.0f"), $.oMySettings.sUnitElevation]);
+      sValue = format("$1$$2$", [fValue.format("%.0f"), $.oMySettings.sUnitElevation]);
     }
     else {
       sValue = self.NOVALUE_LEN3;
     }
-    _oDC.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-    _oDC.drawText(0, 0.25*_oDC.getHeight(), Gfx.FONT_SYSTEM_SMALL, sValue, Gfx.TEXT_JUSTIFY_LEFT);
+    _oDC.drawText(0, self.iYLine2, Gfx.FONT_SYSTEM_SMALL, sValue, Gfx.TEXT_JUSTIFY_LEFT);
+
+    // ... flight level
+    if(LangUtils.notNaN($.oMyAltimeter.fAltitudeISA)) {
+      fValue = Math.round($.oMyAltimeter.fAltitudeISA*0.00656167979f)*5.0f;  // [FL]
+      sValue = format("FL$1$", [fValue.format("%.0f")]);
+    }
+    else {
+      sValue = self.NOVALUE_LEN3;
+    }
+    _oDC.drawText(self.iXLeft, self.iYLine2, Gfx.FONT_SYSTEM_SMALL, sValue, Gfx.TEXT_JUSTIFY_RIGHT);
+
+    // Values (secondary, line 3)
+    _oDC.setColor(Gfx.COLOR_LT_GRAY, Gfx.COLOR_TRANSPARENT);
 
     // ... QNH
     if(LangUtils.notNaN($.oMyAltimeter.fQNH)) {
       fValue = $.oMyAltimeter.fQNH * $.oMySettings.fUnitPressureCoefficient;
-      sValue = format("$1$ $2$",[fValue < 100.0f ? fValue.format("%.3f") : fValue.format("%.1f"), $.oMySettings.sUnitPressure]);
+      sValue = format("$1$$2$",[fValue < 100.0f ? fValue.format("%.2f") : fValue.format("%.0f"), $.oMySettings.sUnitPressure]);
     }
     else {
-      sValue = self.NOVALUE_BLANK;
+      sValue = self.NOVALUE_LEN2;
     }
-    _oDC.setColor(Gfx.COLOR_LT_GRAY, Gfx.COLOR_TRANSPARENT);
-    _oDC.drawText(0, 0.67*_oDC.getHeight(), Gfx.FONT_SYSTEM_XTINY, sValue, Gfx.TEXT_JUSTIFY_LEFT);
+    _oDC.drawText(0, self.iYLine3, Gfx.FONT_SYSTEM_XTINY, sValue, Gfx.TEXT_JUSTIFY_LEFT);
+
+    // ... temperature
+    if(LangUtils.notNaN($.oMyAltimeter.fTemperatureISA) and LangUtils.notNaN($.oMyAltimeter.fTemperatureActual)) {
+      fValue = ($.oMyAltimeter.fTemperatureActual-$.oMyAltimeter.fTemperatureISA) * $.oMySettings.fUnitTemperatureCoefficient;
+      sValue = format("$1$°$2$", [fValue.format("%+.0f"), $.oMySettings.sUnitTemperature]);
+    }
+    else {
+      sValue = self.NOVALUE_LEN2;
+    }
+    _oDC.drawText(self.iXCenter, self.iYLine3, Gfx.FONT_SYSTEM_XTINY, sValue, Gfx.TEXT_JUSTIFY_CENTER);
+
+    // ... density altitude
+    if(LangUtils.notNaN($.oMyAltimeter.fAltitudeDensity)) {
+      fValue = $.oMyAltimeter.fAltitudeDensity * $.oMySettings.fUnitElevationCoefficient;
+      sValue = format("$1$$2$", [fValue.format("%.0f"), $.oMySettings.sUnitElevation]);
+    }
+    else {
+      sValue = self.NOVALUE_LEN2;
+    }
+    _oDC.drawText(self.iXLeft, self.iYLine3, Gfx.FONT_SYSTEM_XTINY, sValue, Gfx.TEXT_JUSTIFY_RIGHT);
   }
 
   function onHide() {
@@ -121,15 +167,6 @@ class MyGlanceView extends Ui.GlanceView {
     if(self.bShow) {
       Ui.requestUpdate();
     }
-  }
-
-}
-
-(:glance)
-class MyGlanceViewDelegate extends Ui.GlanceViewDelegate {
-
-  function initialize() {
-    GlanceViewDelegate.initialize();
   }
 
 }
