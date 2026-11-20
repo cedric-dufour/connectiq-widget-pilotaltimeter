@@ -1,5 +1,10 @@
 PilotAltimeter (Garmin ConnectIQ) Widget
 ========================================
+
+> THIS PROJECT HAS MOVED TO https://codeberg.org/cedric-dufour/connectiq-widget-pilotaltimeter
+>
+> (and may vanish from GitHub with no further notice; please update your upstream URL)
+
 Pilot ICAO/ISA Altimeter for Garmin ConnectIQ devices
 
 
